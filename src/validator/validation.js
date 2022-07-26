@@ -11,7 +11,7 @@ const isValidRequest = function(data){
 
     const isValidNumber = function (value) {
         if (!value || value === undefined) return false
-        if (typeof value !== Number || value.trim().length === 0) return false
+        if (typeof value !== "number") return false
         return true
     }
 
