@@ -15,6 +15,12 @@ const isValidRequest = function(data){
         return true
     }
 
+    const isBoolean = function(value){
+        if (!value || value === undefined) return false
+        if (typeof value !== "boolean") return false
+        return true
+    }
+
     const isValidName = function(name){
     return /^[a-zA-Z]{2,20}$/.test(name.trim())
     }
