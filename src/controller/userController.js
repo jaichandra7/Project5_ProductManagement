@@ -4,9 +4,9 @@ const mongoose=require("mongoose")
 const validator=require("../validator/validation")
 const {uploadFile} = require("../aws/awsConnect")
 const jwt = require("jsonwebtoken");
-const { findOneAndUpdate } = require('../models/userModel');
+// const { findOneAndUpdate } = require('../models/userModel');
 
-
+// API to create User 
 const createUser=async function (req,res){
         const data=req.body
         let {fname,lname,email,phone,address,password} = data;
@@ -15,11 +15,10 @@ const createUser=async function (req,res){
         if(!validator.isValidRequest(data))
         return res.status(400).send({status:false, msg:"Enter User Details "}) //it should not be blank
 
-        
+// to update first name         
         if(!validator.isValidString(fname))
         return res.status(400).send({status:false, msg:"First Name Is Required "}) // it should be string
-
-        if(!validator.isValidName(fname))
+         if(!validator.isValidName(fname))
         return res.status(400).send({status:false, msg:"Enter Valid First Name "})
 
          
@@ -55,7 +54,7 @@ const createUser=async function (req,res){
         data.password = encryptPassword;
         console.log(encryptPassword)
 
-        //to updtae profile Image
+        //to update profile Image
         let profileImage=req.files
          
         // if(!validator.isValidImage(profileImage))
@@ -143,7 +142,7 @@ let decryptPwd =  await bcrypt.compare(password, encryptPwd,function(err, result
     let obj = {userId: isUser._id.toString(),
                token: token
               }
-    return res.status(200).send({status:false, "message": "User login successfull", data:obj})
+    return res.status(200).send({status:true, message: "User login successfull", data:obj})
   }
   else {
     return res.status(401).send({status:false, message:"Invalid password!"});
