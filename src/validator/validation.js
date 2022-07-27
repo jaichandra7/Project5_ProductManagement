@@ -55,4 +55,4 @@ const isValidRequest = function(data){
 
     }
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice}
+module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean}
