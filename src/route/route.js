@@ -1,15 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controller/userController')
+const middleware = require("../middleware/auth")
 // const internController = require('../controllers/internController')
 
 //API's
 
 router.post('/register', userController.createUser )
 
-// router.post('/functionup/interns', internController.addIntern)
+ router.post('/login', userController.loginUser)
 
- //router.get('/register',userController)
+ router.get('/user/:userId/profile',middleware.authenticate,middleware.authorise,userController.getUser)
+
+ router.put('/user/:userId/profile',middleware.authenticate,middleware.authorise,userController.updateUser)
 
 
 // router.all("/**", function (req, res) {
