@@ -44,4 +44,9 @@ const isValidRequest = function(data){
     return /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(pincode)
     }
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode}
+    const isValidPrice = function(price){
+        return /^(?:0|[1-9]\d*)(?:\.(?!.*000)\d+)?$/.test(price)
+
+    }
+
+module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice}

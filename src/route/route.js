@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controller/userController')
+const productController=require('../controller/productController')
 const middleware = require("../middleware/auth")
 // const internController = require('../controllers/internController')
 
@@ -14,6 +15,13 @@ router.post('/register', userController.createUser )
 
  router.put('/user/:userId/profile',middleware.authenticate,middleware.authorise,userController.updateUser)
 
+ router.post('/products', productController.createProduct)
+
+ router.get('/products', productController.getProducts)
+
+ router.get('/products/:productId', productController.getProductsById)
+
+router.delete('/products/:productId', productController.delProductsById)
 
 // router.all("/**", function (req, res) {
 //     res.status(404).send({
