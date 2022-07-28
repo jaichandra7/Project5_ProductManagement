@@ -30,7 +30,7 @@ const createProduct = async function (req, res) {
         return res.status(400).send({ status: false, msg: "Enter Valid Title" })
 
     let title1=await productModel.find({title:title})
-    if(title1)return res.status(400).send({status:false, message:"Title Is Already Exist"})
+    if(title1.length>0)return res.status(400).send({status:false, message:"Title Is Already Exist"})
 
 
 
@@ -64,9 +64,9 @@ const createProduct = async function (req, res) {
    
 
 
-    if (!validator.isValidSize(availableSizes))
+    if (!validator.isValidSize(availableSizes)){
         return res.status(400).send({ status: false, msg: "Enter Valid Size" })
-
+    }else{data.availableSizes=availableSizes.toUpperCase()}
 
 
     // isFreeShipping validation
@@ -101,7 +101,7 @@ const getProducts = async function (req, res) {
     console.log(name)
     let productData = { isDeleted: false }
 
-    // if(size){productData.availableSizes ={availableSizes:{$in: ["x","XL"]}}
+     if(size){productData.availableSizes =size}
 
     if (priceLessThan && priceGreaterThan) { productData.price = { $gt: priceGreaterThan, $lt: priceLessThan } }
     if (priceLessThan && !priceGreaterThan) { productData.price = { $lt: priceLessThan } }
@@ -114,12 +114,13 @@ const getProducts = async function (req, res) {
         if (product.length == 0) return res.status(404).send({ status: false, message: "Product Not Found." })
         return res.status(200).send({ status: true, message: "Successful", data: product })
     }
+   
     let productsByFilter = await productModel.find(productData).sort({ price: 1 })
     if (productsByFilter.length == 0) return res.status(404).send({ status: false, message: "No Data Found" })
     res.status(200).send({ status: true, data: productsByFilter })
 
+    }
 
-}
 
 // Get Products BY Id
 const getProductsById = async function (req, res) {
