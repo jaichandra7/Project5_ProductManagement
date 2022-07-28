@@ -35,7 +35,8 @@ const productSchema = new mongoose.Schema({
                 type:String
             },
         availableSizes: [{
-                type:String
+                type:String,
+                required:true
         }],
         installments: {
                 type:Number

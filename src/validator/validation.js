@@ -25,6 +25,10 @@ const isValidRequest = function(data){
     return /^[a-zA-Z]{2,20}$/.test(name.trim())
     }
 
+    const isValidTitle = function(name){
+        return /^[a-zA-Z\s$]{2,20}$/.test(name.trim())
+        }
+
     const isValidEmail = function(email){
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())
     }
@@ -55,4 +59,19 @@ const isValidRequest = function(data){
 
     }
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean}
+    const isValidSize =function(size) {
+   
+        const validSize = size.split(",").map(x => x.toUpperCase().trim())
+       
+        let givenSizes = ["S", "XS", "M", "X", "L", "XXL", "XL"]
+      
+        for (let i = 0; i < validSize.length; i++) {
+          if (!givenSizes.includes(validSize[i])) {
+            return false
+          }
+        }
+        return validSize
+      }
+    
+
+module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}

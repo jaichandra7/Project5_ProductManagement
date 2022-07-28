@@ -97,13 +97,13 @@ const createUser=async function (req,res){
           return res.status(400).send({status:false, msg:"Enter Valid Street"})
 
           if(!validator.isValidString(billing.city))
-          return res.status(400).send({status:false, msg:"city Is Required,should be in string value "})
+          return res.status(400).send({status:false, msg:"City Is Required,should Be In String Value "})
 
           if(!validator.isValidName(billing.city))
           return res.status(400).send({status:false, msg:"Enter Valid city"})
           
           if(!validator.isValidNumber(billing.pincode))
-          return res.status(400).send({status:false, msg:"Pincode should be numerical"})
+          return res.status(400).send({status:false, msg:"Pincode should be Numerical"})
 
           if(!validator.isvalidPincode(billing.pincode))
           return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
@@ -114,7 +114,7 @@ const createUser=async function (req,res){
 
         
         const userData= await userModel.create(data) //form
-        res.status(201).send({status:true, message:"user successfully created",data:userData})
+        res.status(201).send({status:true, message:"User Successfully Created",data:userData})
 }
 
 const loginUser= async function(req,res){
@@ -122,13 +122,13 @@ const loginUser= async function(req,res){
   let {email, password} = data
 
   if(!validator.isValidRequest(data))
-  return res.status(400).send({status:false, msg:"Enter your email and password "})
+  return res.status(400).send({status:false, msg:"Enter Your Email And Password "})
 
   if(!validator.isValidString(email))
   return res.status(400).send({status:false, msg:"Email Is Required "})
 
   if(!validator.isValidString(password))
-  return res.status(400).send({status:false, msg:"password Is Required "})
+  return res.status(400).send({status:false, msg:"Password Is Required "})
 
   const isUser = await userModel.findOne({email:email})
   if(!isUser) { return res.status(404).send({status:false, message:"User not found"})}
@@ -231,7 +231,7 @@ const updateUser= async function(req,res){
    
   
   let profileImage=req.files
-  if(profileImage){   
+  if(profileImage.length!==0){   
         // if(!validator.isValidImage(profileImage))
         // return res.status(400).send({status:false, msg:"Give valid Image File"})
      
@@ -245,30 +245,35 @@ const updateUser= async function(req,res){
         var parsedAddress = JSON.parse(data.address)
           console.log(parsedAddress)
           let {shipping,billing}=parsedAddress
+        if(shipping){
 
+        
           if(shipping.street){
           if(!validator.isValidString(shipping.street))
-          return res.status(400).send({status:false, msg:"Street Is Required,should be in string value "})
-
+          return res.status(400).send({status:false, msg:"Street Is Required,Should Be In String Value "})
+      
           if(!validator.isvalidStreet(shipping.street))
           return res.status(400).send({status:false, msg:"Enter Valid Street"})
           }
 
           if(shipping.city){
           if(!validator.isValidString(shipping.city))
-          return res.status(400).send({status:false, msg:"city Is Required,should be in string value "})
+          return res.status(400).send({status:false, msg:"City Is Required,Should Be In String Value "})
 
           if(!validator.isValidName(shipping.city))
-          return res.status(400).send({status:false, msg:"Enter Valid city"})
+          return res.status(400).send({status:false, msg:"Enter Valid City"})
           }
 
           if(shipping.pincode){
           if(!validator.isValidNumber(shipping.pincode))
-          return res.status(400).send({status:false, msg:"Pincode should be numerical"})
+          return res.status(400).send({status:false, msg:"Pincode Should Be Numerical"})
 
           if(!validator.isvalidPincode(shipping.pincode))
           return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
           }
+        }
+        
+        if(billing){
 
           if(billing.street){
           if(!validator.isValidString(billing.street))
@@ -288,15 +293,17 @@ const updateUser= async function(req,res){
 
           if(billing.pincode){
           if(!validator.isValidNumber(billing.pincode))
-          return res.status(400).send({status:false, msg:"Pincode should be numerical"})
+          return res.status(400).send({status:false, msg:"Pincode Should Be Numerical"})
 
           if(!validator.isvalidPincode(billing.pincode))
           return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
           }
-
+       
         }
+      }
+        data.address=parsedAddress
         let updateData = await userModel.findByIdAndUpdate({_id:userId} ,data, {new:true})
-        res.status(200).send({ status:true, message: "updated  Successfully" , data:updateData})
+        res.status(200).send({ status:true, message: "Updated  Successfully" , data:updateData})
 }
 
 module.exports={createUser , loginUser , getUser , updateUser}
