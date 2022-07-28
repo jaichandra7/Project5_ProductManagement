@@ -12,7 +12,6 @@ const createProduct = async function (req, res) {
     if (!validator.isValidRequest(data))
         return res.status(400).send({ status: false, msg: "Enter Product Details " }) //it should not be blank
         // isFreeShipping = JSON.parse(data.isFreeShipping)
-        console.log(isFreeShipping)
         let productImage = req.files
 
         // if(!validator.isValidImage(productImage))
@@ -103,13 +102,18 @@ const getProducts = async function (req, res) {
     let productData = { isDeleted: false }
 
     // if(size){productData.availableSizes ={availableSizes:{$in: ["x","XL"]}}
-    if (name) { productData.title = name }
+
     if (priceLessThan && priceGreaterThan) { productData.price = { $gt: priceGreaterThan, $lt: priceLessThan } }
     if (priceLessThan && !priceGreaterThan) { productData.price = { $lt: priceLessThan } }
     if (priceGreaterThan && !priceLessThan) { productData.price = { $gt: priceGreaterThan } }
     // if(!priceSort) return res.status(400).send({status:false,message:""})
-    console.log(productData)
-    // console.log(priceLessThan)
+    
+  
+    if (name) {
+        product = await productModel.find({ productData, title: new RegExp(name, 'i') }).sort({ price: 1 }) //,{price: {$gt: gt}}
+        if (product.length == 0) return res.status(404).send({ status: false, message: "Product Not Found." })
+        return res.status(200).send({ status: true, message: "Successful", data: product })
+    }
     let productsByFilter = await productModel.find(productData).sort({ price: 1 })
     if (productsByFilter.length == 0) return res.status(404).send({ status: false, message: "No Data Found" })
     res.status(200).send({ status: true, data: productsByFilter })

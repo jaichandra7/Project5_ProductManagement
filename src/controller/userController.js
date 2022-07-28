@@ -241,60 +241,67 @@ const updateUser= async function(req,res){
         data.profileImage=uploadedProfileImage
         }  
 
-    // if(data.address){
-    //     var parsedAddress = JSON.parse(data.address)
-    //       console.log(parsedAddress)
-    //       let {shipping,billing}=parsedAddress
-        let address=data.address
-          if(address.shipping.street){
-          if(!validator.isValidString(address.shipping.street))
+    if(data.address){
+        var parsedAddress = JSON.parse(data.address)
+          console.log(parsedAddress)
+          let {shipping,billing}=parsedAddress
+        if(shipping){
+
+        
+          if(shipping.street){
+          if(!validator.isValidString(shipping.street))
           return res.status(400).send({status:false, msg:"Street Is Required,Should Be In String Value "})
       
-          // if(!validator.isvalidStreet(address.shipping.street))
-          // return res.status(400).send({status:false, msg:"Enter Valid Street"})
-          }
-
-          if(address.shipping.city){
-          if(!validator.isValidString(address.shipping.city))
-          return res.status(400).send({status:false, msg:"City Is Required,Should Be In String Value "})
-
-          if(!validator.isValidName(address.shipping.city))
-          return res.status(400).send({status:false, msg:"Enter Valid City"})
-          }
-
-          if(address.shipping.pincode){
-          if(!validator.isValidNumber(address.shipping.pincode))
-          return res.status(400).send({status:false, msg:"Pincode Should Be Numerical"})
-
-          if(!validator.isvalidPincode(address.shipping.pincode))
-          return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
-          }
-
-          if(address.billing.street){
-          if(!validator.isValidString(address.billing.street))
-          return res.status(400).send({status:false, msg:"Street Is Required,should be in string value "})
-
-          if(!validator.isvalidStreet(address.billing.street))
+          if(!validator.isvalidStreet(shipping.street))
           return res.status(400).send({status:false, msg:"Enter Valid Street"})
           }
 
-          if(address.billing.city){
-          if(!validator.isValidString(address.billing.city))
+          if(shipping.city){
+          if(!validator.isValidString(shipping.city))
+          return res.status(400).send({status:false, msg:"City Is Required,Should Be In String Value "})
+
+          if(!validator.isValidName(shipping.city))
+          return res.status(400).send({status:false, msg:"Enter Valid City"})
+          }
+
+          if(shipping.pincode){
+          if(!validator.isValidNumber(shipping.pincode))
+          return res.status(400).send({status:false, msg:"Pincode Should Be Numerical"})
+
+          if(!validator.isvalidPincode(shipping.pincode))
+          return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
+          }
+        }
+        
+        if(billing){
+
+          if(billing.street){
+          if(!validator.isValidString(billing.street))
+          return res.status(400).send({status:false, msg:"Street Is Required,should be in string value "})
+
+          if(!validator.isvalidStreet(billing.street))
+          return res.status(400).send({status:false, msg:"Enter Valid Street"})
+          }
+
+          if(billing.city){
+          if(!validator.isValidString(billing.city))
           return res.status(400).send({status:false, msg:"city Is Required,should be in string value "})
 
-          if(!validator.isValidName(address.billing.city))
+          if(!validator.isValidName(billing.city))
           return res.status(400).send({status:false, msg:"Enter Valid city"})
           }
 
-          if(address.billing.pincode){
-          if(!validator.isValidNumber(address.billing.pincode))
+          if(billing.pincode){
+          if(!validator.isValidNumber(billing.pincode))
           return res.status(400).send({status:false, msg:"Pincode Should Be Numerical"})
 
-          if(!validator.isvalidPincode(address.billing.pincode))
+          if(!validator.isvalidPincode(billing.pincode))
           return res.status(400).send({status:false, msg:"Enter Valid Pincode "})
           }
-
-        
+       
+        }
+      }
+        data.address=parsedAddress
         let updateData = await userModel.findByIdAndUpdate({_id:userId} ,data, {new:true})
         res.status(200).send({ status:true, message: "Updated  Successfully" , data:updateData})
 }
