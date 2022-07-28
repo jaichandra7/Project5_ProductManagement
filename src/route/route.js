@@ -17,7 +17,7 @@ router.post('/register', userController.createUser )
 
  router.post('/products', productController.createProduct)
 
- router.get('/products', productController.getProducts)
+ //router.get('/products', productController.getProducts)
 
  router.get('/products/:productId', productController.getProductsById)
 
