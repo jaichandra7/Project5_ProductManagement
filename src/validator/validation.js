@@ -9,17 +9,34 @@ const isValidRequest = function(data){
         return true
     }
 
+    const isValidNumbers=  function(n) {
+        // if(n > 4 && n< 7)
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
+    
     const isValidNumber = function (value) {
         if (!value || value === undefined) return false
         if (typeof value !== "number") return false
         return true
     }
 
-    const isBoolean = function(value){
-        if (!value || value === undefined) return false
-        if (typeof value !== "boolean") return false
-        return true
+    function isBoolean(val)
+    {
+        // if ( !val ) return false
+        if ((typeof val === 'string' && (val.toLowerCase() === 'true' )) )
+            return true;
+        else if ((typeof val === 'string' && (val.toLowerCase() === 'false' )) )
+            return true;
+    
+        return false;
     }
+    
+
+    // const isBoolean = function(value){
+    //     // if (!value || value === undefined) return false
+    //     if (typeof value !== "boolean") return false
+    //     return true
+    // }
 
     const isValidName = function(name){
     return /^[a-zA-Z]{2,20}$/.test(name.trim())
@@ -55,7 +72,9 @@ const isValidRequest = function(data){
     }
 
     const isValidPrice = function(price){
-        return /^(?:0|[1-9]\d*)(?:\.(?!.*000)\d+)?$/.test(price)
+        // return /^(?:0|[1-9]\d*)(?:\.(?!.*00)\d+)?$/.test(price)
+        return /\d{1,3}(?:[,]\d{3})*(?:[.]\d{0,2})?|\d{1,3}(?:[ ]\d{3})*(?:[,]\d{0,2})?/.test(price)
+
 
     }
 
@@ -74,4 +93,4 @@ const isValidRequest = function(data){
       }
     
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}
+module.exports={isValidRequest, isValidString, isValidNumber, isValidNumbers, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}
