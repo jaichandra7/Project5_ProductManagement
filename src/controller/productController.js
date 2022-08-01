@@ -64,20 +64,33 @@ const createProduct = async function (req, res) {
    
 
 
-    if (!validator.isValidSize(availableSizes)){
-        return res.status(400).send({ status: false, msg: "Enter Valid Size" })
-    }else{data.availableSizes=availableSizes.toUpperCase().split(",").map(x=>x.trim());
-}
+//     if (!validator.isValidSize(availableSizes)){
+//         return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+//     }else{data.availableSizes=availableSizes.toUpperCase().split(",").map(x=>x.trim());
+// }
+// if (isFreeShipping || typeof isFreeShipping == 'string') {
+//     //if the user given any whitespace
+//     isFreeShipping = isFreeShipping.toLowerCase().trim();//trim the whitespaces
+//     if (isFreeShipping == true || isFreeShipping == false) {
+//       //convert from string to boolean
+//       isFreeShipping = JSON.parse(isFreeShipping);
+//     } else {
+//       return res.status(400).send({ status: false, message: "Enter a valid value for isFreeShipping" })
+//     }
+
+//     if (typeof isFreeShipping !== 'boolean') return res.status(400).send({ status: false, message: "Free shipping should be in boolean value" })//boolean
+//   }
 
 
 
    
-    if (isFreeShipping) {
-    // isFreeShipping = isFreeShipping.toLowerCase()
-    console.log(isFreeShipping)
-    if (!validator.isBoolean(isFreeShipping))
-      return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
-    }
+    // if (isFreeShipping) {
+    //     // var parsedShipping = JSON.parse(data.isFreeShipping)
+    // // isFreeShipping = isFreeShipping.toLowerCase()
+    // console.log(isFreeShipping)
+    // if (!validator.isBoolean(isFreeShipping))
+    //   return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+    // }
 
     
     //STYLE VALIDATION

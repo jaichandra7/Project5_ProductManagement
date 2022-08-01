@@ -23,10 +23,12 @@ const isValidRequest = function(data){
     function isBoolean(val)
     {
         // if ( !val ) return false
+        if(val == true || val == false)
+         val = JSON.parse(val)
         if ((typeof val === 'string' && (val.toLowerCase() === 'true' )) )
             return true;
-        else if ((typeof val === 'string' && (val.toLowerCase() === 'false' )) )
-            return true;
+        // else if ((typeof val === 'string' && (val.toLowerCase() === 'false' )) )
+            // return true;
     
         return false;
     }
@@ -80,7 +82,7 @@ const isValidRequest = function(data){
 
     const isValidSize =function(size) {
    
-        const validSize = size.split(",").map(x => x.toUpperCase().trim())
+        // const validSize = size.split(",").map(x => x.toUpperCase().trim())
        
         let givenSizes = ["S", "XS", "M", "X", "L", "XXL", "XL"]
       
