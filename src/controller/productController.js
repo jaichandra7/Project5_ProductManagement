@@ -33,7 +33,6 @@ const createProduct = async function (req, res) {
     if(title1.length>0)return res.status(400).send({status:false, message:"Title Is Already Exist"})
 
 
-
     //Description validation
     if (!validator.isValidString(description))
         return res.status(400).send({ status: false, msg: "Description Is Required " }) // it should be string
@@ -41,10 +40,11 @@ const createProduct = async function (req, res) {
         return res.status(400).send({ status: false, msg: "Enter Valid Description " })
 
     //Price Validation
-    // if(!validator.isValidNumber(price))
-    // return res.status(400).send({status:false, msg:"Price Is Required "}) // it should be string
+    // var parsedPrice = JSON.parse(data.price)
+     if(!validator.isValidNumbers(price))
+     return res.status(400).send({status:false, msg:"Price Is Required And Must Be In Numbers"}) // it should be string
     if (!validator.isValidPrice(price))
-        return res.status(400).send({ status: false, msg: "Enter Valid Price " })
+        return res.status(400).send({ status: false, msg: "Enter Valid Price" })
 
         
     if (!validator.isValidString(currencyId))
@@ -70,15 +70,16 @@ const createProduct = async function (req, res) {
 }
 
 
-    // isFreeShipping validation
-    // if (isFreeShipping) {
-    //     if (!validator.isBoolean(isFreeShipping))
-    //         return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
 
-    // }
+   
+    if (isFreeShipping) {
+    // isFreeShipping = isFreeShipping.toLowerCase()
+    console.log(isFreeShipping)
+    if (!validator.isBoolean(isFreeShipping))
+      return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+    }
 
-    // if (typeof isFreeShipping !== "boolean") { return res.status(400).send({ status: false, msg: "Free Shipping should contain a boolean value" }) }
-
+    
     //STYLE VALIDATION
     if (!validator.isValidString(style))
         return res.status(400).send({ status: false, msg: "Style Is Required " }) // it should be string
@@ -137,7 +138,7 @@ const getProductsById = async function (req, res) {
 }
 
 
-//put API
+//------------------------------------------------------------------UPDATE API-----------------------------------------------------------------
 const updateProduct = async function (req, res) {
     let productId = req.params.productId
 
