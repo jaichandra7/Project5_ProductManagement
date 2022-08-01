@@ -66,7 +66,8 @@ const createProduct = async function (req, res) {
 
     if (!validator.isValidSize(availableSizes)){
         return res.status(400).send({ status: false, msg: "Enter Valid Size" })
-    }else{data.availableSizes=availableSizes.toUpperCase()}
+    }else{data.availableSizes=availableSizes.toUpperCase().split(",").map(x=>x.trim());
+}
 
 
     // isFreeShipping validation
@@ -98,10 +99,10 @@ const createProduct = async function (req, res) {
 const getProducts = async function (req, res) {
     let data = req.query
     let { size, name, priceLessThan, priceGreaterThan } = data
-    console.log(name)
-    let productData = { isDeleted: false }
+    //console.log(name)
+    let productData = {isDeleted: false }
 
-     if(size){productData.availableSizes =size}
+     if(size){productData.availableSizes= { $in: size.toUpperCase().split(",").map(x=>x.trim())}}
 
     if (priceLessThan && priceGreaterThan) { productData.price = { $gt: priceGreaterThan, $lt: priceLessThan } }
     if (priceLessThan && !priceGreaterThan) { productData.price = { $lt: priceLessThan } }
@@ -114,7 +115,7 @@ const getProducts = async function (req, res) {
         if (product.length == 0) return res.status(404).send({ status: false, message: "Product Not Found." })
         return res.status(200).send({ status: true, message: "Successful", data: product })
     }
-   
+   console.log(productData)
     let productsByFilter = await productModel.find(productData).sort({ price: 1 })
     if (productsByFilter.length == 0) return res.status(404).send({ status: false, message: "No Data Found" })
     res.status(200).send({ status: true, data: productsByFilter })
@@ -213,8 +214,9 @@ const updateProduct = async function (req, res) {
 
     //isAvailableSize validation
     if (availableSizes) {
-        if (!validator.isValidSize(availableSizes))
-            return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+        if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+        data.availableSizes= availableSizes.toUpperCase().split(",").map(x=>x.trim())
+
     }
 
 

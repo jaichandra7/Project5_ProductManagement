@@ -34,10 +34,10 @@ const productSchema = new mongoose.Schema({
         style: {
                 type:String
             },
-        availableSizes: [{
-                type:String,
+        availableSizes: {
+                type:[String],
                 required:true
-        }],
+        },
         installments: {
                 type:Number
             },
