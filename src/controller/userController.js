@@ -182,8 +182,8 @@ const updateUser = async function (req, res) {
 
   const { fname, lname, email, phone, password } = data;
 
-   if(!validator.isValidRequest(data))
-   return res.status(400).send({status:false, msg:"Enter User Details To Update "}) //it should not be blank
+  //  if(!validator.isValidRequest(data))
+  //  return res.status(400).send({status:false, msg:"Enter User Details To Update "}) //it should not be blank
 
   if (fname) {
     if (!validator.isValidString(fname))
