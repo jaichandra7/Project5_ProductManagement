@@ -12,10 +12,6 @@ const addToCart = async function (req, res) {
     let { cartId, items, totalPrice, totalItems } = data
     data.userId = userId
     let cartData = await cartModel.findOne({ userId: userId, isDeleted: false })
-
-  
-    // console.log(sum)
-    // console.log(length)
     if (cartData) {
         let sum = cartData.totalPrice
         let length = cartData.totalItems
