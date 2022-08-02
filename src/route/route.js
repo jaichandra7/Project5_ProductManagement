@@ -28,6 +28,11 @@ router.put('/products/:productId', productController.updateProduct)
 
 router.post('/users/:userId/cart', cartController.addToCart)
 
+router.get('/users/:userId/cart', middleware.authenticate, middleware.authorise , cartController.getCart)
+
+router.delete('/users/:userId/cart',middleware.authenticate, middleware.authorise , cartController.delCart)
+
+router.put('/users/:userId/cart', cartController.updateCart)
 // router.all("/**", function (req, res) {
 //     res.status(404).send({
 //         status: false,
