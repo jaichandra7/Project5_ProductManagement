@@ -6,8 +6,9 @@ const productModel = require("../models/productModel")
 const userModel = require("../models/userModel");
 const { findById } = require("../models/productModel");
 
-
+// CREATE API
 const addToCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let data = req.body
     let { productId, cartId } = data
@@ -78,8 +79,13 @@ const addToCart = async function (req, res) {
         res.status(201).send({ status: true, data: dataToBeAdded })
     }
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// GET CART API
 const getCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let userData = await userModel.findById({ _id: userId })
     if (!userData) return res.status(404).send({ status: false, message: "No User Found" })
@@ -87,8 +93,13 @@ const getCart = async function (req, res) {
     if (!cartData) return res.status(404).send({ status: false, message: "Cart Not Found" })
     return res.status(200).send({ status: true, message: 'success', data: cartData })
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// DELETE CART API
 const delCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let userData = await userModel.findById({ _id: userId })
     if (!userData) return res.status(404).send({ status: false, message: "No User Found" })
@@ -101,8 +112,13 @@ const delCart = async function (req, res) {
     res.status(204).send({ status: true, message: "Cart Deleted Successfully", data: cartData })
 
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// UPDATE CART API
 const updateCart = async function (req, res) {
+    try{
     let data = req.body
     let userId = req.params.userId
     let { productId, cartId, removeProduct } = data
@@ -136,9 +152,10 @@ const updateCart = async function (req, res) {
     if(removeProduct==0){
         for(let i=0;i<items.length;i++){
             if(items[i].productId==productId){
+                findCart.totalPrice=findCart.totalPrice-findProduct.price*items[i].quantity
                 items.splice(i,1)
                 findCart.totalItems=findCart.totalItems-1
-                findCart.totalPrice=findCart.totalPrice-findProduct.price*items[i].quantity
+                
             }
         }
         findCart.save()
@@ -160,4 +177,9 @@ const updateCart = async function (req, res) {
         return res.status(200).send({status:true , message:"success", data:findCart})
     }
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
+
+
+
 module.exports = { addToCart, getCart, delCart, updateCart }
