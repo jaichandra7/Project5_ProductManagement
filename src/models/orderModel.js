@@ -2,9 +2,9 @@ const mongoose = require("mongoose")
 let ObjectId=mongoose.Schema.ObjectId
 const orderSchema = new mongoose.Schema({
     
-        userId: {type :ObjectId, ref: User, required : true},
+        userId: {type :ObjectId, ref: 'user', required : true},
         items: [{
-          productId: {type :ObjectId, ref : ProductModel , required : true},
+          productId: {type :ObjectId, ref : 'product' , required : true},
           quantity: {type :Number, required : true, minlen: 1}
         }],
         totalPrice: {type :Number, required : true },

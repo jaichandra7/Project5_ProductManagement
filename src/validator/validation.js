@@ -20,25 +20,26 @@ const isValidRequest = function(data){
         return true
     }
 
-    // function isBoolean(value)
-    // {
-    //     // if ( !val ) return false
-    //     if(val == true || val == false)
-    //      val = JSON.parse(val)
-    //     if ((typeof val === 'string' && (val.toLowerCase() === 'true' )) )
-    //         return true;
-    //     // else if ((typeof val === 'string' && (val.toLowerCase() === 'false' )) )
-    //         // return true;
+    function isBoolean(val)
+    {
+        if(val === undefined ) return false
+        // if ( !val ) return false
+        // if(val == true || val == false)
+        //  val = JSON.parse(val)
+        if (typeof val === 'string' && val === 'true'  )
+            return true;
+        else if (typeof val === 'string' && val === 'false'  )
+         return true;
     
-    //     return false;
-    // }
+        return false;
+    }
     
 
-    const isBoolean = function(value){
-        // if (!value || value === undefined) return false
-        if (!typeof value === "boolean") return false
-        return true
-    }
+    // const isBoolean = function(value){
+    //     // if (!value || value === undefined) return false
+    //     if (!typeof value === "boolean") return false
+    //     return true
+    // }
 
     const isValidName = function(name){
     return /^[a-zA-Z]{2,20}$/.test(name.trim())

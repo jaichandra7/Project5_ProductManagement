@@ -313,7 +313,7 @@ const updateUser = async function (req, res) {
   //address = JSON.parse(parsedAddress)
   data.address = parsedAddress
   let updateData = await userModel.findByIdAndUpdate({ _id: userId }, data, { new: true })
-  res.status(200).send({ status: true, message: "Updated  Successfully", data: updateData })
+  res.status(200).send({ status: true, message: "User profile updated", data: updateData })
   }
   catch (err) {return res.status(500).send({status:false , message:err.message})}}
 

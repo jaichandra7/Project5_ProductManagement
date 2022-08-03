@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 //product creation
 const createProduct = async function (req, res) {
-    try{
+    // try{
     let data = req.body
     let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments, isDeleted } = data
     
@@ -61,11 +61,12 @@ const createProduct = async function (req, res) {
     if (currencyFormat !== "₹") return res.status(400).send({ status: false, msg: "Currency Format Must Be ₹" })
 
 
-     if (data.isFreeShipping) {
-        data.isFreeShipping = JSON.parse(data.isFreeShipping)
+     if (isFreeShipping) {
+        //  isFreeShipping = JSON.parse(isFreeShipping)
     // isFreeShipping = isFreeShipping.toLowerCase()
-    // console.log(isFreeShipping)
-    if (!validator.isBoolean(data.isFreeShipping))
+     console.log(isFreeShipping)
+   
+    if (!validator.isBoolean(isFreeShipping))
       return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
     }
 
@@ -85,8 +86,8 @@ const createProduct = async function (req, res) {
     let saveData = await productModel.create(data)
     return res.status(201).send({ status: true, message: 'Success', data: saveData })
 }
-    catch (err) {return res.status(500).send({status:false , message:err.message})}
-}
+     // catch (err) {return res.status(500).send({status:false , message:err.message})}
+// }
 
 // --------------------------------------------------------get products------------------------------------------------------------------------
 const getProducts = async function (req, res) {
