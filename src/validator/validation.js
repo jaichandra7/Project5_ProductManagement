@@ -62,7 +62,9 @@ const isValidRequest = function(data){
     }
 
     const isValidImage = function(profileImage){
-    return /\.(jpe?g|png|gif|bmp)$/.test(profileImage) 
+   // return /\.(jpe?g|png|gif|bmp)$/.test(profileImage) 
+    return /([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(profileImage) 
+
     }
 
     const isvalidStreet = function(street){

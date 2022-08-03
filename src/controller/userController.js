@@ -180,26 +180,23 @@ const updateUser = async function (req, res) {
   let userId = req.params.userId
   let data = req.body
 
+  let profileImage = req.files
+  if(!(profileImage||validator.isValidRequest(data)))
+  return res.status(400).send({status:false, msg:"Enter User Details To Update "}) //it should not be blank
 
+ 
+  if (profileImage) {
+    console.log(profileImage[0])
+    if (!profileImage.length)  return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });
+    if(!validator.isValidImage(profileImage[0].originalname)) return res.status(400).send({status:false, msg:"Give valid Image File"})
 
-  //let profileImage = req.files
-  if (req.files.length) {
-    // if(!validator.isValidImage(profileImage))
-    // return res.status(400).send({status:false, msg:"Give valid Image File"})
-    let files=req.files
-    // if (!(profileImage && profileImage.length)) {
-    //   return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });
-    // }
-    
-    let uploadedProfileImage = await uploadFile(files[0])
+    let uploadedProfileImage = await uploadFile(profileImage[0])
     data.profileImage = uploadedProfileImage
   }
 
 
   let { fname, lname, email, phone, password } = data;
 
-   if(!validator.isValidRequest(data))
-   return res.status(400).send({status:false, msg:"Enter User Details To Update "}) //it should not be blank
 
   if (fname) {
     if (!validator.isValidString(fname))
