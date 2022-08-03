@@ -180,7 +180,23 @@ const updateUser = async function (req, res) {
   let userId = req.params.userId
   let data = req.body
 
-  const { fname, lname, email, phone, password } = data;
+
+
+  //let profileImage = req.files
+  if (req.files.length) {
+    // if(!validator.isValidImage(profileImage))
+    // return res.status(400).send({status:false, msg:"Give valid Image File"})
+    let files=req.files
+    // if (!(profileImage && profileImage.length)) {
+    //   return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });
+    // }
+    
+    let uploadedProfileImage = await uploadFile(files[0])
+    data.profileImage = uploadedProfileImage
+  }
+
+
+  let { fname, lname, email, phone, password } = data;
 
    if(!validator.isValidRequest(data))
    return res.status(400).send({status:false, msg:"Enter User Details To Update "}) //it should not be blank
@@ -236,18 +252,6 @@ const updateUser = async function (req, res) {
 
   }
 
-
-  let profileImage = req.files
-  if (profileImage.length !== 0) {
-    // if(!validator.isValidImage(profileImage))
-    // return res.status(400).send({status:false, msg:"Give valid Image File"})
-
-    if (!(profileImage && profileImage.length)) {
-      return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });
-    }
-    const uploadedProfileImage = await uploadFile(profileImage[0])
-    data.profileImage = uploadedProfileImage
-  }
 
   if (data.address) {
     var parsedAddress = JSON.parse(data.address)

@@ -130,8 +130,8 @@ const updateCart = async function (req, res) {
     let UserIdIncart = findCart.userId.toString()
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "User Id in cart does not match with the entered Id" })
 
-   // if (!removeProduct) { return res.status(400).send({ status: false, message: "removeProduct field required" }) }
-    //if (removeProduct != (0 || 1)) return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
+   if (!(!isNaN(Number(removeProduct))))  return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
+   if (!((removeProduct === 0) || (removeProduct === 1))) return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
     let items = findCart.items
     if(removeProduct==0){
         for(let i=0;i<items.length;i++){
@@ -146,9 +146,14 @@ const updateCart = async function (req, res) {
     }else{
         for(let i=0;i<items.length;i++){
             if(items[i].productId==productId){
+                findCart.totalPrice=findCart.totalPrice-findProduct.price
                 let quantity = items[i].quantity
                 quantity=quantity-1
                 items[i].quantity=quantity
+                if(items[i].quantity==0){
+                    items.splice(i,1)
+                    findCart.totalItems=findCart.totalItems-1
+                }
             }
         }
         findCart.save()
