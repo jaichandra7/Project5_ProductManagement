@@ -47,7 +47,7 @@ const addToCart = async function (req, res) {
         if (!iscart) return res.status(404).send({ status: false, message: "Cart does not exists" })
 
         let UserIdIncart = iscart.userId.toString()
-        if (UserIdIncart != userId) return res.status(400).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
+        if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
 
         if (!productId) return res.status(400).send({ status: false, message: "Enter the Product Id" })
 
@@ -128,7 +128,7 @@ const updateCart = async function (req, res) {
     let findCart = await cartModel.findById(cartId)
     if (!findCart) return res.status(404).send({ status: false, message: "Cart does not exists" })
     let UserIdIncart = findCart.userId.toString()
-    if (UserIdIncart != userId) return res.status(400).send({ status: false, message: "User Id in cart does not match with the entered Id" })
+    if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "User Id in cart does not match with the entered Id" })
 
    // if (!removeProduct) { return res.status(400).send({ status: false, message: "removeProduct field required" }) }
     //if (removeProduct != (0 || 1)) return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
@@ -138,7 +138,7 @@ const updateCart = async function (req, res) {
             if(items[i].productId==productId){
                 items.splice(i,1)
                 findCart.totalItems=findCart.totalItems-1
-                findCart.totalPrice=findCart.totalPrice-findProduct.price
+                findCart.totalPrice=findCart.totalPrice-findProduct.price*items[i].quantity
             }
         }
         findCart.save()
