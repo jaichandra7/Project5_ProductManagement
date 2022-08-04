@@ -51,6 +51,7 @@ const updateOrder= async function(req,res){
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Order Id" })
     if(!validator.isValidString(status)) return res.status(400).send({ status: false, msg: "Status Must Be In String" })
     let statusArray=["pending","cancelled","completed"]
+    if(!status.includes(statusArray)) return res.status(400).send({status:false, message:"Status Must Be among pendinng,cancellable and completed"})
     const orderData = await orderModel.findOne({_id:orderId })
     if(!orderData){
         return res.status(404).send({status:false, message:"Order Does Not Exist"})
