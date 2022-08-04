@@ -21,20 +21,13 @@ const isValidRequest = function(data){
     }
 
     function isBoolean(val)
-    {
-        if(["true","false"].indexOf(val) == -1){
-        return false
-     }
-        // if(val === undefined ) return false
-        // // if ( !val ) return false
-        // // if(val == true || val == false)
-        // //  val = JSON.parse(val)
-        // if (typeof val === 'string' && val === 'true'  )
-        //     return true;
-        // else if (typeof val === 'string' && val === 'false'  )
-        //  return true;
+    {    
+        if (typeof val === 'string' && val === 'true'  )
+            return true;
+        else if (typeof val === 'string' && val === 'false'  )
+         return true;
     
-        // return false;
+        return false;
     }
     
 
@@ -67,9 +60,6 @@ const isValidRequest = function(data){
     }
 
     const isValidImage = function(profileImage){
-    // return /\.(jpe?g|png|gif|bmp)$/ 
-    //  return ([^\s]+(\.(?i)(jpg|png|gif|bmp))$) .test(profileImage)
-     //return /.(gif|jpeg|tiff?|jpg|png|webp|bmp)$/i.
      return /([/|.|\w|\s|-])*\.(?:jpg|gif|png|bmp|jpeg|webp|tiff)/.test(profileImage)
     }
 
@@ -90,7 +80,7 @@ const isValidRequest = function(data){
 
     const isValidSize =function(size) {
    
-        // const validSize = size.split(",").map(x => x.toUpperCase().trim())
+     const validSize = size.split(",").map(x => x.toUpperCase().trim())
        
         let givenSizes = ["S", "XS", "M", "X", "L", "XXL", "XL"]
       

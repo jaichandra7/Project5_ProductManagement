@@ -77,6 +77,14 @@ const createProduct = async function (req, res) {
     if (!validator.isValidTitle(style))
         return res.status(400).send({ status: false, msg: "Enter Valid style " })
 
+
+ //isAvailableSize validation
+ if (availableSizes) {
+    if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+    data.availableSizes= availableSizes.toUpperCase().split(",").map(x=>x.trim())
+
+}
+
     //isDeleted validation
     if (isDeleted) {
         if (!validator.isBoolean(isDeleted))

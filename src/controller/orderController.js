@@ -40,12 +40,13 @@ const updateOrder= async function(req,res){
     let userId=req.params.userId
     let data = req.body
     let {orderId,status}=data
-// console.log(status)
-    const orderData = await orderModel.findOne({_id:orderId , cancellable:true })
+
+    
+    const orderData = await orderModel.findOne({_id:orderId})
     if(!orderData){
         return res.status(404).send({status:false, message:"Order is not Cancellable!"})
     }
-    // console.log(orderData)
+    if(!orderData.cancellable && status=="cancelled") return res.status(400).send({status:false, message:"order is not cancellable"})
     orderData.status = status
     orderData.save()
     res.status(200).send({ status: true, message: "Order Update Successfully Updated !!!", data: orderData })
