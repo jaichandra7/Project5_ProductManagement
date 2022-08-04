@@ -11,10 +11,27 @@ const { findById } = require("../models/productModel");
 // CREATE ORDER API
 const createOrder= async function(req,res){
     let data=req.body
+    let {cartId,cancellable}=data
     let userId=req.params.userId
     data.userId=userId
-    const orderData = await orderModel.create(data) //form
-    res.status(201).send({ status: true, message: "Order Successfully Placed !!!", data: orderData })
+    const cartDetails = await cartModel.findById({_id:cartId}).select({_id:0})
+    let UserIdIncart=cartDetails.userId
+    if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
+    let items= cartDetails.items
+    let sum = 0
+    for(let i=0;i<items.length;i++){
+        sum+=items[i].quantity
+    }
+    console.log(sum)
+    let obj={...cartDetails.toObject(),cancellable:data.cancellable,totalQuantity:sum}
+    // cartDetails.totalQuantity=sum
+    console.log(obj)
+    const orderData = await orderModel.create(obj) //form
+    let finalData={...orderData.toObject()}
+    delete finalData.__v
+    delete finalData.isDeleted
+    console.log(orderData)
+    res.status(201).send({ status: true, message: "Order Successfully Placed !!!", data: finalData })
 }
 
 

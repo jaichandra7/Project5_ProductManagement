@@ -22,19 +22,23 @@ const isValidRequest = function(data){
 
     function isBoolean(val)
     {
-        if(val === undefined ) return false
-        // if ( !val ) return false
-        // if(val == true || val == false)
-        //  val = JSON.parse(val)
-        if (typeof val === 'string' && val === 'true'  )
-            return true;
-        else if (typeof val === 'string' && val === 'false'  )
-         return true;
+        if(["true","false"].indexOf(val) == -1){
+        return false
+     }
+        // if(val === undefined ) return false
+        // // if ( !val ) return false
+        // // if(val == true || val == false)
+        // //  val = JSON.parse(val)
+        // if (typeof val === 'string' && val === 'true'  )
+        //     return true;
+        // else if (typeof val === 'string' && val === 'false'  )
+        //  return true;
     
-        return false;
+        // return false;
     }
     
 
+    
     // const isBoolean = function(value){
     //     // if (!value || value === undefined) return false
     //     if (!typeof value === "boolean") return false
