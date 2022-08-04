@@ -143,6 +143,7 @@ const updateCart = async function (req, res) {
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Cart Id" })
     let findCart = await cartModel.findById(cartId)
     if (!findCart) return res.status(404).send({ status: false, message: "Cart does not exists" })
+    if(!findCart.items.length) return res.status(400).send({status:false, message: "Your Cart Is Empty" })
     let UserIdIncart = findCart.userId.toString()
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "User Id in cart does not match with the entered Id" })
 
