@@ -190,7 +190,7 @@ const updateUser = async function (req, res) {
 
   
   if (profileImage.length) {
-    // console.log(profileImage[0])
+  
     if (!profileImage.length)  return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });
     if(!validator.isValidImage(profileImage[0].originalname)) return res.status(400).send({status:false, message:"Give valid Image File"})
 
