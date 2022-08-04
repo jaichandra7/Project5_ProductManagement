@@ -22,13 +22,14 @@ const isValidRequest = function(data){
 
     function isBoolean(val)
     {
+        if(val === undefined ) return false
         // if ( !val ) return false
-        if(val == true || val == false)
-         val = JSON.parse(val)
-        if ((typeof val === 'string' && (val.toLowerCase() === 'true' )) )
+        // if(val == true || val == false)
+        //  val = JSON.parse(val)
+        if (typeof val === 'string' && val === 'true'  )
             return true;
-        // else if ((typeof val === 'string' && (val.toLowerCase() === 'false' )) )
-            // return true;
+        else if (typeof val === 'string' && val === 'false'  )
+         return true;
     
         return false;
     }
@@ -36,7 +37,7 @@ const isValidRequest = function(data){
 
     // const isBoolean = function(value){
     //     // if (!value || value === undefined) return false
-    //     if (typeof value !== "boolean") return false
+    //     if (!typeof value === "boolean") return false
     //     return true
     // }
 
@@ -62,9 +63,10 @@ const isValidRequest = function(data){
     }
 
     const isValidImage = function(profileImage){
-   // return /\.(jpe?g|png|gif|bmp)$/.test(profileImage) 
-    return /([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(profileImage) 
-
+    // return /\.(jpe?g|png|gif|bmp)$/ 
+    //  return ([^\s]+(\.(?i)(jpg|png|gif|bmp))$) .test(profileImage)
+     //return /.(gif|jpeg|tiff?|jpg|png|webp|bmp)$/i.
+     return /([/|.|\w|\s|-])*\.(?:jpg|gif|png|bmp|jpeg|webp|tiff)/.test(profileImage)
     }
 
     const isvalidStreet = function(street){
@@ -97,4 +99,4 @@ const isValidRequest = function(data){
       }
     
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidNumbers, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage, isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}
+module.exports={isValidRequest, isValidString, isValidNumber, isValidNumbers, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage,  isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}

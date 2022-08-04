@@ -28,21 +28,21 @@ const authorise = async function (req, res, next) {
         let token = req.headers.authorization.slice(7)
 
         let decodedToken = jwt.verify(token, "Group10-Product-Management")
-        if (!decodedToken) return res.status(401).send({ status: false, msg: "token is not valid" })
+        if (!decodedToken) return res.status(401).send({ status: false, message: "token is not valid" })
         dataToBeModified = req.params.userId
         var isValid = mongoose.Types.ObjectId.isValid(dataToBeModified)
-        if (!isValid) return res.status(400).send({ status: false, msg: "enter valid id" })
+        if (!isValid) return res.status(400).send({ status: false, message: "Enter Valid User Id" })
         let userData = await userModel.findById(dataToBeModified)
-        if (!userData) { return res.status(404).send({ status: false, msg: "user not found" }) }
+        if (!userData) { return res.status(404).send({ status: false, message: "user not found" }) }
         let userId = userData._id
         console.log(userId)
         let userLoggedIn = decodedToken.userId
         if (userId == userLoggedIn) {
             next()
-        } else { return res.status(403).send({ status: false, msg: 'NOT AUTHORISED USER' }) }
+        } else { return res.status(403).send({ status: false, message: 'NOT AUTHORISED USER' }) }
     }
     catch (error) {
-        res.status(500).send({ msg: error.message })
+        res.status(500).send({ message: error.message })
     }
 }
 

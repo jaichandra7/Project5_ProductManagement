@@ -6,8 +6,9 @@ const productModel = require("../models/productModel")
 const userModel = require("../models/userModel");
 const { findById } = require("../models/productModel");
 
-
+// CREATE API
 const addToCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let data = req.body
     let { productId, cartId } = data
@@ -47,7 +48,7 @@ const addToCart = async function (req, res) {
         if (!iscart) return res.status(404).send({ status: false, message: "Cart does not exists" })
 
         let UserIdIncart = iscart.userId.toString()
-        if (UserIdIncart != userId) return res.status(400).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
+        if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
 
         if (!productId) return res.status(400).send({ status: false, message: "Enter the Product Id" })
 
@@ -78,8 +79,13 @@ const addToCart = async function (req, res) {
         res.status(201).send({ status: true, data: dataToBeAdded })
     }
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// GET CART API
 const getCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let userData = await userModel.findById({ _id: userId })
     if (!userData) return res.status(404).send({ status: false, message: "No User Found" })
@@ -87,8 +93,13 @@ const getCart = async function (req, res) {
     if (!cartData) return res.status(404).send({ status: false, message: "Cart Not Found" })
     return res.status(200).send({ status: true, message: 'success', data: cartData })
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// DELETE CART API
 const delCart = async function (req, res) {
+    try{
     let userId = req.params.userId
     let userData = await userModel.findById({ _id: userId })
     if (!userData) return res.status(404).send({ status: false, message: "No User Found" })
@@ -101,8 +112,13 @@ const delCart = async function (req, res) {
     res.status(204).send({ status: true, message: "Cart Deleted Successfully", data: cartData })
 
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
+
+// UPDATE CART API
 const updateCart = async function (req, res) {
+    try{
     let data = req.body
     let userId = req.params.userId
     let { productId, cartId, removeProduct } = data
@@ -128,7 +144,7 @@ const updateCart = async function (req, res) {
     let findCart = await cartModel.findById(cartId)
     if (!findCart) return res.status(404).send({ status: false, message: "Cart does not exists" })
     let UserIdIncart = findCart.userId.toString()
-    if (UserIdIncart != userId) return res.status(400).send({ status: false, message: "User Id in cart does not match with the entered Id" })
+    if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "User Id in cart does not match with the entered Id" })
 
    if (!(!isNaN(Number(removeProduct))))  return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
    if (!((removeProduct === 0) || (removeProduct === 1))) return res.status(400).send({ status: false, message: "remove product must be 0 or 1" })
@@ -136,9 +152,10 @@ const updateCart = async function (req, res) {
     if(removeProduct==0){
         for(let i=0;i<items.length;i++){
             if(items[i].productId==productId){
+                findCart.totalPrice=findCart.totalPrice-findProduct.price*items[i].quantity
                 items.splice(i,1)
                 findCart.totalItems=findCart.totalItems-1
-                findCart.totalPrice=findCart.totalPrice-findProduct.price
+                
             }
         }
         findCart.save()
@@ -160,4 +177,9 @@ const updateCart = async function (req, res) {
         return res.status(200).send({status:true , message:"success", data:findCart})
     }
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
+
+
+
 module.exports = { addToCart, getCart, delCart, updateCart }

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 //product creation
 const createProduct = async function (req, res) {
+    // try{
     let data = req.body
     let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments, isDeleted } = data
     
@@ -40,7 +41,6 @@ const createProduct = async function (req, res) {
         return res.status(400).send({ status: false, msg: "Enter Valid Description " })
 
     //Price Validation
-    // var parsedPrice = JSON.parse(data.price)
      if(!validator.isValidNumbers(price))
      return res.status(400).send({status:false, msg:"Price Is Required And Must Be In Numbers"}) // it should be string
     if (!validator.isValidPrice(price))
@@ -61,13 +61,14 @@ const createProduct = async function (req, res) {
     if (currencyFormat !== "₹") return res.status(400).send({ status: false, msg: "Currency Format Must Be ₹" })
 
 
-    // if (isFreeShipping) {
-    //     // var parsedShipping = JSON.parse(data.isFreeShipping)
-    // // isFreeShipping = isFreeShipping.toLowerCase()
-    // console.log(isFreeShipping)
-    // if (!validator.isBoolean(isFreeShipping))
-    //   return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
-    // }
+     if (isFreeShipping) {
+        //  isFreeShipping = JSON.parse(isFreeShipping)
+    // isFreeShipping = isFreeShipping.toLowerCase()
+     console.log(isFreeShipping)
+   
+    if (!validator.isBoolean(isFreeShipping))
+      return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+    }
 
     
     //STYLE VALIDATION
@@ -85,12 +86,14 @@ const createProduct = async function (req, res) {
     let saveData = await productModel.create(data)
     return res.status(201).send({ status: true, message: 'Success', data: saveData })
 }
+     // catch (err) {return res.status(500).send({status:false , message:err.message})}
+// }
 
 // --------------------------------------------------------get products------------------------------------------------------------------------
 const getProducts = async function (req, res) {
+    try{
     let data = req.query
     let { size, name, priceLessThan, priceGreaterThan } = data
-    //console.log(name)
     let productData = {isDeleted: false }
 
      if(size){productData.availableSizes= { $in: size.toUpperCase().split(",").map(x=>x.trim())}}
@@ -98,7 +101,7 @@ const getProducts = async function (req, res) {
     if (priceLessThan && priceGreaterThan) { productData.price = { $gt: priceGreaterThan, $lt: priceLessThan } }
     if (priceLessThan && !priceGreaterThan) { productData.price = { $lt: priceLessThan } }
     if (priceGreaterThan && !priceLessThan) { productData.price = { $gt: priceGreaterThan } }
-    // if(!priceSort) return res.status(400).send({status:false,message:""})
+    
     
   
     if (name) {
@@ -112,10 +115,13 @@ const getProducts = async function (req, res) {
     res.status(200).send({ status: true, data: productsByFilter })
 
     }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
 
 // Get Products BY Id
 const getProductsById = async function (req, res) {
+    try{
     let productId = req.params.productId
     var isValid = mongoose.Types.ObjectId.isValid(productId)
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
@@ -126,10 +132,13 @@ const getProductsById = async function (req, res) {
         return res.status(200).send({ status: true, message: "Success", data: productsDetails })
     }
 }
+catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
 
 //------------------------------------------------------------------UPDATE API-----------------------------------------------------------------
 const updateProduct = async function (req, res) {
+    try{
     let productId = req.params.productId
 
     var isValid = mongoose.Types.ObjectId.isValid(productId)
@@ -161,10 +170,7 @@ const updateProduct = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Enter Valid Description " })
     }
 
-    //price validation
-    // if(!validator.isValidNumber(price))
-    // return res.status(400).send({status:false, msg:"title Name Is Required "}) 
-
+    //currency Id validation
     if (currencyId) {
         if (!validator.isValidString(currencyId))
             return res.status(400).send({ status: false, msg: "Currency Id is Required " })
@@ -209,9 +215,6 @@ const updateProduct = async function (req, res) {
         data.availableSizes= availableSizes.toUpperCase().split(",").map(x=>x.trim())
 
     }
-
-
-
     //isFreeShipping validation
     if (isFreeShipping) {
         if (!validator.isBoolean(isFreeShipping))
@@ -229,11 +232,14 @@ const updateProduct = async function (req, res) {
     res.status(200).send({ status: true, message: "Updated  Successfully", data: updateData })
 
 }
+    catch (err) {return res.status(500).send({status:false , message:err.message})}
+}
 
 
 
 //DELETE PRODUCTS BY ID
 const delProductsById = async function (req, res) {
+    try{
     let productId = req.params.productId
     var isValid = mongoose.Types.ObjectId.isValid(productId)
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
@@ -243,6 +249,8 @@ const delProductsById = async function (req, res) {
     } else {
         return res.status(200).send({ status: true, message: "Successfully Deleted" })
     }
+}
+catch (err) {return res.status(500).send({status:false , message:err.message})}
 }
 
 module.exports = { createProduct, getProducts, getProductsById, delProductsById, updateProduct }
