@@ -42,22 +42,32 @@ const createOrder= async function(req,res){
 }
 
 
-//UPDATE ORDER API
+//======================================================UPDATE ORDER API==========================================
+
 const updateOrder= async function(req,res){
+
     let userId=req.params.userId
     let data = req.body
     let {orderId,status}=data
+
+    //orderId validation
     var isValid = mongoose.Types.ObjectId.isValid(orderId)
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Order Id" })
+
+    //status validation
     if(!validator.isValidString(status)) return res.status(400).send({ status: false, msg: "Status Must Be In String" })
     let statusArray=["pending","cancelled","completed"]
-    if(!status.includes(statusArray)) return res.status(400).send({status:false, message:"Status Must Be among pendinng,cancellable and completed"})
+    if(statusArray.indexOf(status) == -1) return res.status(400).send({status:false, message:"Status Must Be among pending,cancellable and completed"})
+
     const orderData = await orderModel.findOne({_id:orderId })
     if(!orderData){
         return res.status(404).send({status:false, message:"Order Does Not Exist"})
     }
+
+    //checking userId in orde and in parm path matches or not
     let userIdInOrder = orderData.userId
     if (userIdInOrder != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in Order" })
+    
     if(!orderData.cancellable && status=="cancelled") return res.status(400).send({status:false, message: "It Is Not Cancellable Order"})
     orderData.status = status
     orderData.save()
