@@ -14,9 +14,12 @@ const createOrder= async function(req,res){
 
     let data=req.body
     let userId=req.params.userId
+      // to check blank request 
+      if (!validator.isValidRequest(data))
+      return res.status(400).send({ status: false, message: "Enter Order Details " }) //it should not be blank
     let {cartId,cancellable}=data
     data.userId=userId
-
+    
     //cartId validation
     var isValid = mongoose.Types.ObjectId.isValid(cartId)
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Cart Id" })
@@ -31,7 +34,11 @@ const createOrder= async function(req,res){
     //checking if cart is empty
     if(!cartDetails.items.length) return res.status(400).send({status:false, message: "Your Cart Is Empty" })
 
+<<<<<<< HEAD
      //checking userId in cart and in parm path matches or not
+=======
+     //checking userId in order matches with param path 
+>>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
     let UserIdIncart=cartDetails.userId
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
     
@@ -46,7 +53,7 @@ const createOrder= async function(req,res){
     
     await cartModel.findOneAndUpdate({_id:cartId},{items:[],totalPrice:0,totalItems:0})
     
-    // deleting extra keys
+    // Deleting extra keys
     let finalData={...orderData.toObject()}
     delete finalData.__v
     delete finalData.isDeleted
@@ -62,7 +69,11 @@ const updateOrder= async function(req,res){
 
     let userId=req.params.userId
     let data = req.body
+      // to check blank request 
+      if (!validator.isValidRequest(data))
+      return res.status(400).send({ status: false, message: "Enter Order Details" }) //it should not be blank
     let {orderId,status}=data
+  
 
     //orderId validation
     var isValid = mongoose.Types.ObjectId.isValid(orderId)
@@ -78,7 +89,11 @@ const updateOrder= async function(req,res){
         return res.status(404).send({status:false, message:"Order Does Not Exist"})
     }
 
+<<<<<<< HEAD
     //checking userId in order and in parm path matches or not
+=======
+    //checking userId in order matches with parampath 
+>>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
     let userIdInOrder = orderData.userId
     if (userIdInOrder != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in Order" })
     
