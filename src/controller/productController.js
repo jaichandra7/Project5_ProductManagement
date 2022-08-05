@@ -18,7 +18,11 @@ const createProduct = async function (req, res) {
     //productImage validation
     let productImage = req.files
     if (!validator.isValidImage(productImage[0].originalname))
+<<<<<<< HEAD
+        return res.status(400).send({ status: false, msg: "Give valid Image File" })
+=======
         return res.status(400).send({ status: false, message: "Give valid Image File" })
+>>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
 
     if (!(productImage && productImage.length)) {
         return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
@@ -62,9 +66,23 @@ const createProduct = async function (req, res) {
 
     //isFreeShipping validation
     if (isFreeShipping) {
+<<<<<<< HEAD
+       if(validator.isValidString(isFreeShipping)){
+     
+        if(!((isFreeShipping=="true") || (isFreeShipping=="false")|| (isFreeShipping==" "))) { return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })}
+      
+       }
+        // return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+        
+       // if (!validator.isBoolean(isFreeShipping))
+         //   return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+        
+=======
         if (!validator.isBoolean(isFreeShipping))
             return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
+>>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
     }
+    console.log(isFreeShipping)
 
     //STYLE VALIDATION
     if (!validator.isValidString(style))
@@ -126,8 +144,13 @@ const getProductsById = async function (req, res) {
 
         //productId validation
         var isValid = mongoose.Types.ObjectId.isValid(productId)
+<<<<<<< HEAD
+        if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
+
+=======
         if (!isValid) return res.status(400).send({ status: false, message: "Enter Valid Product Id" })
         
+>>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
         let productsDetails = await productModel.findOne({ _id: productId, isDeleted: false })
         if (!productsDetails) {
             return res.status(404).send({ status: false, message: "Product Not Found" })
