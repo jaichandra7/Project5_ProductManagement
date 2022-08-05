@@ -31,7 +31,7 @@ const createOrder= async function(req,res){
     //checking if cart is empty
     if(!cartDetails.items.length) return res.status(400).send({status:false, message: "Your Cart Is Empty" })
 
-     //checking userId in orde and in parm path matches or not
+     //checking userId in cart and in parm path matches or not
     let UserIdIncart=cartDetails.userId
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
     
@@ -78,7 +78,7 @@ const updateOrder= async function(req,res){
         return res.status(404).send({status:false, message:"Order Does Not Exist"})
     }
 
-    //checking userId in orde and in parm path matches or not
+    //checking userId in order and in parm path matches or not
     let userIdInOrder = orderData.userId
     if (userIdInOrder != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in Order" })
     

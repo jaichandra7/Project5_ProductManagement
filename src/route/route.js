@@ -42,9 +42,9 @@ router.put('/users/:userId/cart', cartController.updateCart)
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
-router.post('/users/:userId/orders',orderController.createOrder)
+router.post('/users/:userId/orders',middleware.authenticate, middleware.authorise ,orderController.createOrder)
 
-router.put('/users/:userId/orders',orderController.updateOrder)
+router.put('/users/:userId/orders',middleware.authenticate, middleware.authorise,orderController.updateOrder)
 
 
 router.all("/*", function (req, res) {

@@ -22,11 +22,11 @@ const isValidRequest = function(data){
 
     function isBoolean(val)
     {    
-        if (typeof val === 'string' && val === 'true'  )
+        if (typeof val === 'Boolean'  )
             return true;
-        else if (typeof val === 'string' && val === 'false'  )
-         return true;
-    
+        //else if (typeof val === 'string' && val === 'false'  )
+         //return true;
+     //if(typeof val == "string" && val===" ") return res.status(400).send({status:false, msg:"isFreeshippig should be boolean value"})
         return false;
     }
     

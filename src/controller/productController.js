@@ -17,7 +17,7 @@ const createProduct = async function (req, res) {
     
     //productImage validation
     let productImage = req.files
-    if (!validator.isValidImage(productImage))
+    if (!validator.isValidImage(productImage[0].originalname))
         return res.status(400).send({ status: false, msg: "Give valid Image File" })
 
     if (!(productImage && productImage.length)) {
@@ -62,9 +62,18 @@ const createProduct = async function (req, res) {
 
     //isFreeShipping validation
     if (isFreeShipping) {
-        if (!validator.isBoolean(isFreeShipping))
-            return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+       if(validator.isValidString(isFreeShipping)){
+     
+        if(!((isFreeShipping=="true") || (isFreeShipping=="false")|| (isFreeShipping==" "))) { return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })}
+      
+       }
+        // return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+        
+       // if (!validator.isBoolean(isFreeShipping))
+         //   return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+        
     }
+    console.log(isFreeShipping)
 
     //STYLE VALIDATION
     if (!validator.isValidString(style))
@@ -127,7 +136,7 @@ const getProductsById = async function (req, res) {
         //productId validation
         var isValid = mongoose.Types.ObjectId.isValid(productId)
         if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
-        
+
         let productsDetails = await productModel.findOne({ _id: productId, isDeleted: false })
         if (!productsDetails) {
             return res.status(404).send({ status: false, message: "Product Not Found" })
