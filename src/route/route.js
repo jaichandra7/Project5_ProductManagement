@@ -32,19 +32,19 @@ router.put('/products/:productId', productController.updateProduct)
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-router.post('/users/:userId/cart', cartController.addToCart)
+router.post('/users/:userId/cart',middleware.authenticate, middleware.authorise , cartController.addToCart)
 
 router.get('/users/:userId/cart', middleware.authenticate, middleware.authorise , cartController.getCart)
 
 router.delete('/users/:userId/cart',middleware.authenticate, middleware.authorise , cartController.delCart)
 
-router.put('/users/:userId/cart', cartController.updateCart)
+router.put('/users/:userId/cart',middleware.authenticate, middleware.authorise , cartController.updateCart)
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
-router.post('/users/:userId/orders',orderController.createOrder)
+router.post('/users/:userId/orders',middleware.authenticate, middleware.authorise,orderController.createOrder)
 
-router.put('/users/:userId/orders',orderController.updateOrder)
+router.put('/users/:userId/orders',middleware.authenticate, middleware.authorise,orderController.updateOrder)
 
 
 router.all("/*", function (req, res) {

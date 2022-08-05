@@ -69,14 +69,14 @@ const addToCart = async function (req, res) {
 
                 iscart.save()
                 // let dataToBeAdded = await cartModel.findOneAndUpdate({_id:cartId},obj, {new:true})
-                return res.status(201).send({ status: true, data: iscart })
+                return res.status(200).send({ status: true, message:"Success", data: iscart })
             }
         }
         let newArray = [{ productId: productId, quantity: 1 }]
         items = [...items, ...newArray]
         let obj = { totalPrice: totalPrice, totalItems: totalItems + 1, userId: userId, items: items }
         let dataToBeAdded = await cartModel.findOneAndUpdate({ _id: cartId }, obj, { new: true })
-        res.status(201).send({ status: true, data: dataToBeAdded })
+        res.status(200).send({ status: true, message:"Success", data: dataToBeAdded })
     }
 }
     catch (err) {return res.status(500).send({status:false , message:err.message})}

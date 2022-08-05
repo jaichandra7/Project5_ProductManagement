@@ -5,7 +5,7 @@ const { uploadFile } = require("../aws/awsConnect")
 const jwt = require("jsonwebtoken");
 
 
-//============================================================product creation=====================================================
+//============================================================Product Creation=====================================================
 
 const createProduct = async function (req, res) {
  try{
@@ -13,12 +13,12 @@ const createProduct = async function (req, res) {
     let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments, isDeleted } = data
 
     if (!validator.isValidRequest(data))
-        return res.status(400).send({ status: false, msg: "Enter Product Details " }) //it should not be blank
+        return res.status(400).send({ status: false, message: "Enter Product Details " }) //it should not be blank
     
     //productImage validation
     let productImage = req.files
-    if (!validator.isValidImage(productImage))
-        return res.status(400).send({ status: false, msg: "Give valid Image File" })
+    if (!validator.isValidImage(productImage[0].originalname))
+        return res.status(400).send({ status: false, message: "Give valid Image File" })
 
     if (!(productImage && productImage.length)) {
         return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
@@ -28,9 +28,9 @@ const createProduct = async function (req, res) {
 
     //Title Validation
     if (!validator.isValidString(title))
-        return res.status(400).send({ status: false, msg: "Title Is Required" }) // it should be string
+        return res.status(400).send({ status: false, message: "Title Is Required" }) // it should be string
     if (!validator.isValidTitle(title))
-        return res.status(400).send({ status: false, msg: "Enter Valid Title" })
+        return res.status(400).send({ status: false, message: "Enter Valid Title" })
 
     //checking uniqueness of title
     let title1 = await productModel.find({ title: title })
@@ -38,50 +38,50 @@ const createProduct = async function (req, res) {
 
     //Description validation
     if (!validator.isValidString(description))
-        return res.status(400).send({ status: false, msg: "Description Is Required " }) // it should be string
+        return res.status(400).send({ status: false, message: "Description Is Required " }) // it should be string
     if (!validator.isvalidStreet(description))
-        return res.status(400).send({ status: false, msg: "Enter Valid Description " })
+        return res.status(400).send({ status: false, message: "Enter Valid Description " })
 
     //Price Validation
     if (!validator.isValidNumbers(price))
-        return res.status(400).send({ status: false, msg: "Price Is Required And Must Be In Numbers" }) // it should be string
+        return res.status(400).send({ status: false, message: "Price Is Required And Must Be In Numbers" }) // it should be string
     if (!validator.isValidPrice(price))
-        return res.status(400).send({ status: false, msg: "Enter Valid Price" })
+        return res.status(400).send({ status: false, message: "Enter Valid Price" })
 
     //currencyId validation
     if (!validator.isValidString(currencyId))
-        return res.status(400).send({ status: false, msg: "Currency Id is Required " })
+        return res.status(400).send({ status: false, message: "Currency Id is Required " })
 
-    if (currencyId !== "INR") return res.status(400).send({ status: false, msg: "Currency Id Must Be INR" })
+    if (currencyId !== "INR") return res.status(400).send({ status: false, message: "Currency Id Must Be INR" })
 
     //currencyFormat validation
     if (!validator.isValidString(currencyFormat))
-        return res.status(400).send({ status: false, msg: "Currency Format is Required " })
+        return res.status(400).send({ status: false, message: "Currency Format is Required " })
 
-    if (currencyFormat !== "₹") return res.status(400).send({ status: false, msg: "Currency Format Must Be ₹" })
+    if (currencyFormat !== "₹") return res.status(400).send({ status: false, message: "Currency Format Must Be ₹" })
 
     //isFreeShipping validation
     if (isFreeShipping) {
         if (!validator.isBoolean(isFreeShipping))
-            return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+            return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
     }
 
     //STYLE VALIDATION
     if (!validator.isValidString(style))
-        return res.status(400).send({ status: false, msg: "Style Is Required " }) // it should be string
+        return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
     if (!validator.isValidTitle(style))
-        return res.status(400).send({ status: false, msg: "Enter Valid style " })
+        return res.status(400).send({ status: false, message: "Enter Valid style " })
 
     //isAvailableSize validation
     if (availableSizes) {
-        if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+        if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, message: "Enter Valid Size" })
         data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
      }
 
     //isDeleted validation
     if (isDeleted) {
         if (!validator.isBoolean(isDeleted))
-            return res.status(400).send({ status: false, msg: "isDeleted Must Be A Boolean Value" })
+            return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
     }
 
     let saveData = await productModel.create(data)
@@ -110,7 +110,7 @@ const getProducts = async function (req, res) {
       
         let productsByFilter = await productModel.find(productData).sort({ price: 1 })
         if (productsByFilter.length == 0) return res.status(404).send({ status: false, message: "No Data Found" })
-        res.status(200).send({ status: true, data: productsByFilter })
+        res.status(200).send({ status: true, message: "Successful", data: productsByFilter })
 
     }
     catch (err) { return res.status(500).send({ status: false, message: err.message }) }
@@ -126,7 +126,7 @@ const getProductsById = async function (req, res) {
 
         //productId validation
         var isValid = mongoose.Types.ObjectId.isValid(productId)
-        if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
+        if (!isValid) return res.status(400).send({ status: false, message: "Enter Valid Product Id" })
         
         let productsDetails = await productModel.findOne({ _id: productId, isDeleted: false })
         if (!productsDetails) {
@@ -145,7 +145,7 @@ const updateProduct = async function (req, res) {
         let productId = req.params.productId
 
         var isValid = mongoose.Types.ObjectId.isValid(productId)
-        if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Id" })
+        if (!isValid) return res.status(400).send({ status: false, message: "Enter Valid Id" })
 
 
         let data = req.body
@@ -153,49 +153,49 @@ const updateProduct = async function (req, res) {
 
 
         if (!validator.isValidRequest(data))
-            return res.status(400).send({ status: false, msg: "Enter User Details " }) //it should not be blank
+            return res.status(400).send({ status: false, message: "Enter Product Details " }) //it should not be blank
 
         //title validation
         if (title) {
             if (!validator.isValidString(title))
-                return res.status(400).send({ status: false, msg: "Title Is Required " }) // it should be string
+                return res.status(400).send({ status: false, message: "Title Is Required " }) // it should be string
 
             if (!validator.isValidTitle(title))
-                return res.status(400).send({ status: false, msg: "Enter Valid title " })
+                return res.status(400).send({ status: false, message: "Enter Valid title " })
         }
 
         //description validation
         if (description) {
             if (!validator.isValidString(description))
-                return res.status(400).send({ status: false, msg: "Description Is Required " }) // it should be string
+                return res.status(400).send({ status: false, message: "Description Is Required " }) // it should be string
 
             if (!validator.isValidStreet(description))
-                return res.status(400).send({ status: false, msg: "Enter Valid Description " })
+                return res.status(400).send({ status: false, message: "Enter Valid Description " })
         }
 
         //currency Id validation
         if (currencyId) {
             if (!validator.isValidString(currencyId))
-                return res.status(400).send({ status: false, msg: "Currency Id is Required " })
+                return res.status(400).send({ status: false, message: "Currency Id is Required " })
 
-            if (currencyId !== "INR") return res.status(400).send({ status: false, msg: "Currency Id Must Be INR" })
+            if (currencyId !== "INR") return res.status(400).send({ status: false, message: "Currency Id Must Be INR" })
         }
 
         //currencyFormat validation
         if (currencyFormat) {
             if (!validator.isValidString(currencyFormat))
-                return res.status(400).send({ status: false, msg: "Currency Id Is Required " })
+                return res.status(400).send({ status: false, message: "Currency Id Is Required " })
 
-            if (currencyId !== "₹") return res.status(400).send({ status: false, msg: "Currency Format Must Be ₹" })
+            if (currencyId !== "₹") return res.status(400).send({ status: false, message: "Currency Format Must Be ₹" })
         }
 
         //style validation
         if (style) {
             if (!validator.isValidString(style))
-                return res.status(400).send({ status: false, msg: "Style Is Required " }) // it should be string
+                return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
 
             if (!validator.isValidName(style))
-                return res.status(400).send({ status: false, msg: "Enter Valid style" })
+                return res.status(400).send({ status: false, message: "Enter Valid style" })
         }
 
         //productImage validation
@@ -210,25 +210,26 @@ const updateProduct = async function (req, res) {
 
         //isAvailableSize validation
         if (availableSizes) {
-            if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, msg: "Enter Valid Size" })
+            if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, message: "Enter Valid Size" })
             data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
 
         }
         //isFreeShipping validation
         if (isFreeShipping) {
             if (!validator.isBoolean(isFreeShipping))
-                return res.status(400).send({ status: false, msg: "IsFreeShipping Must Be Boolean value" })
+                return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
 
         }
 
         //isDeleted validation
         if (isDeleted) {
             if (!validator.isBoolean(isDeleted))
-                return res.status(400).send({ status: false, msg: "isDeleted Must Be A Boolean Value" })
+                return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
         }
 
         let updateData = await productModel.findByIdAndUpdate({ _id: productId, isDeleted: false }, data, { new: true })
-        res.status(200).send({ status: true, message: "Updated  Successfully", data: updateData })
+        if(!updateData) return res.status(404).send({status: true, message: "Product Not Found"})
+        return res.status(200).send({ status: true, message: "Updated  Successfully", data: updateData })
 
     }
     catch (err) { return res.status(500).send({ status: false, message: err.message }) }
@@ -243,7 +244,7 @@ const delProductsById = async function (req, res) {
     try {
         let productId = req.params.productId
         var isValid = mongoose.Types.ObjectId.isValid(productId)
-        if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Product Id" })
+        if (!isValid) return res.status(400).send({ status: false, message: "Enter Valid Product Id" })
         let productsDetails = await productModel.findOneAndUpdate({ _id: productId, isDeleted: false }, { isDeleted: true, deletedAt: Date.now() }, { new: true })
         if (!productsDetails) {
             return res.status(404).send({ status: false, message: "Product Not Found" })
