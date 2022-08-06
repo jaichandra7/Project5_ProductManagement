@@ -68,7 +68,6 @@ const addToCart = async function (req, res) {
                 iscart.totalPrice = totalPrice
 
                 iscart.save()
-                // let dataToBeAdded = await cartModel.findOneAndUpdate({_id:cartId},obj, {new:true})
                 return res.status(200).send({ status: true, message:"Success", data: iscart })
             }
         }

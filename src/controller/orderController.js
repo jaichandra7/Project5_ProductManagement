@@ -34,11 +34,8 @@ const createOrder= async function(req,res){
     //checking if cart is empty
     if(!cartDetails.items.length) return res.status(400).send({status:false, message: "Your Cart Is Empty" })
 
-<<<<<<< HEAD
-     //checking userId in cart and in parm path matches or not
-=======
+
      //checking userId in order matches with param path 
->>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
     let UserIdIncart=cartDetails.userId
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
     
@@ -89,11 +86,8 @@ const updateOrder= async function(req,res){
         return res.status(404).send({status:false, message:"Order Does Not Exist"})
     }
 
-<<<<<<< HEAD
-    //checking userId in order and in parm path matches or not
-=======
+
     //checking userId in order matches with parampath 
->>>>>>> 69ecad0122954e86fe04a52e2281a718b1628d19
     let userIdInOrder = orderData.userId
     if (userIdInOrder != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in Order" })
     

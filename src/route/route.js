@@ -5,7 +5,6 @@ const productController = require('../controller/productController')
 const cartController = require('../controller/cartController')
 const orderController = require('../controller/orderController')
 const middleware = require("../middleware/auth")
-// const internController = require('../controllers/internController')
 
 //API's
 

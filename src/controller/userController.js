@@ -118,7 +118,7 @@ const createUser = async function (req, res) {
   }
    data.address = parsedAddress
    
-  const userData = await userModel.create(data) //form
+  const userData = await userModel.create(data) 
   res.status(201).send({ status: true, message: "User Successfully Created", data: userData })
  }
  catch(err) {return res.status(500).send({status:false , message:err.message })}
