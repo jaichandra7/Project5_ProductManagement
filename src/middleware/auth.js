@@ -35,7 +35,6 @@ const authorise = async function (req, res, next) {
         let userData = await userModel.findById(dataToBeModified)
         if (!userData) { return res.status(404).send({ status: false, message: "user not found" }) }
         let userId = userData._id
-        console.log(userId)
         let userLoggedIn = decodedToken.userId
         if (userId == userLoggedIn) {
             next()

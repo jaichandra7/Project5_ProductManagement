@@ -25,8 +25,9 @@ const createOrder= async function(req,res){
     if (!isValid) return res.status(400).send({ status: false, msg: "Enter Valid Cart Id" })
 
     //cancellable validation
+    if(cancellable){
     if(typeof cancellable!=="boolean") return res.status(400).send({status:false, message: "Cancellable Should Be Boolean Value"})
-  
+    }
     //checking cart exists or not
     const cartDetails = await cartModel.findById({_id:cartId}).select({_id:0})
     if(!cartDetails) return res.status(404).send({status:false , message: "Cart Does Not Exist"})
@@ -36,6 +37,7 @@ const createOrder= async function(req,res){
 
 
      //checking userId in order matches with param path 
+
     let UserIdIncart=cartDetails.userId
     if (UserIdIncart != userId) return res.status(403).send({ status: false, message: "Entered UserId does not match with the user Id in cart" })
     

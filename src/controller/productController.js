@@ -5,8 +5,6 @@ const { uploadFile } = require("../aws/awsConnect")
 const jwt = require("jsonwebtoken");
 mongoose.Schema.Types.Boolean.convertToFalse.add('');
 
-
-
 //============================================================Product Creation=====================================================
 
 const createProduct = async function (req, res) {
@@ -217,7 +215,7 @@ const updateProduct = async function (req, res) {
 
         }
 
-        
+
         //style validation
         if (style) {
             if (!validator.isValidString(style))
@@ -238,10 +236,12 @@ const updateProduct = async function (req, res) {
         }
 
         //isAvailableSize validation
-        if (availableSizes) {
+        if (availableSizes) { 
+            console.log(!availableSizes.isEmpty())
+            if( availableSizes.isEmpty() ) return res.status(400).send({ status: false, message: "Enter atleast One Size" })
             if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, message: "Enter Valid Size" })
             data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
-
+           
         }
 
         //installments Validation
