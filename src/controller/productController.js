@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const validator = require("../validator/validation")
 const { uploadFile } = require("../aws/awsConnect")
 const jwt = require("jsonwebtoken");
-mongoose.Schema.Types.Boolean.convertToFalse.add('');
+//mongoose.Schema.Types.Boolean.convertToFalse.add('');
 
 //============================================================Product Creation=====================================================
 
@@ -161,10 +161,10 @@ const updateProduct = async function (req, res) {
 
         let data = req.body
         let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments, isDeleted } = data
+        let productImage = req.files
 
-
-        if (!validator.isValidRequest(data))
-            return res.status(400).send({ status: false, message: "Enter Product Details " }) //it should not be blank
+        //empty request validation
+        if(!(productImage || validator.isValidRequest(data))) return res.status(400).send({status:false, message:"Enter User Details To Update "}) //it should not be blank
 
         //title validation
         if (title) {
@@ -226,8 +226,8 @@ const updateProduct = async function (req, res) {
         }
 
         //productImage validation
-        let productImage = req.files
         if (productImage.length) {
+            console.log(productImage)
             if (!productImage.length) return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
             if (!validator.isValidImage(productImage[0].originalname)) return res.status(400).send({ status: false, message: "Give valid Image File" })
 
@@ -236,16 +236,16 @@ const updateProduct = async function (req, res) {
         }
 
         //isAvailableSize validation
-        if (availableSizes) { 
-            console.log(!availableSizes.isEmpty())
-            if( availableSizes.isEmpty() ) return res.status(400).send({ status: false, message: "Enter atleast One Size" })
+        if (availableSizes || availableSizes === "") {   
+            if( availableSizes === "") return res.status(400).send({ status: false, message: "Enter atleast One Size" })
             if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, message: "Enter Valid Size" })
             data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
            
         }
 
         //installments Validation
-        if (installments) {
+        if (installments || installments === "") {
+            //if( installments === "") return res.status(400).send({ status: false, message: "Enter atleast One Size" })
             if (!validator.isValidNumbers(installments))
                 return res.status(400).send({ status: false, message: "Installment Is Required And Must Be In Numbers" })
             if (!validator.isValidPrice(installments))
