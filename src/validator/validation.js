@@ -64,21 +64,19 @@ const isValidRequest = function(data){
     }
 
     // To Validate Street
-    const isvalidStreet = function(street){
+    const isValidStreet = function(street){
     return /\w*\s*|\w|\D/.test(street.trim())
     }
 
     // To Validate Pincode
-    const isvalidPincode = function(pincode){
+    const isValidPincode = function(pincode){
     return /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(pincode)
     }
 
     // To Validate Price
     const isValidPrice = function(price){
         return /\d{1,3}(?:[,]\d{3})*(?:[.]\d{0,2})?|\d{1,3}(?:[ ]\d{3})*(?:[,]\d{0,2})?/.test(price)
-
-
-    }
+     }
 
     // To Validate Size
     const isValidSize =function(size) {
@@ -93,4 +91,4 @@ const isValidRequest = function(data){
       }
     
 
-module.exports={isValidRequest, isValidString, isValidNumber, isValidNumbers, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage,  isvalidStreet, isvalidPincode, isValidPrice,isBoolean, isValidSize}
+module.exports={isValidRequest, isValidString, isValidNumber, isValidNumbers, isValidName, isValidTitle, isValidEmail, isValidMobile, isValidPassword, isValidImage,  isValidStreet, isValidPincode, isValidPrice,isBoolean, isValidSize}

@@ -67,8 +67,11 @@ const createUser = async function (req, res) {
   data.profileImage = uploadedProfileImage
 
   // address
-  if (data.address) {
-    var parsedAddress = JSON.parse(data.address)
+  console.log(address)
+  if (address || address === "") {
+    console.log(address)
+    if(address === "")  return res.status(400).send({ status: false, message: "Enter Address" })
+    var parsedAddress = JSON.parse(address) 
     console.log(parsedAddress)
     let { shipping, billing } = parsedAddress
     if (shipping) {
@@ -76,7 +79,7 @@ const createUser = async function (req, res) {
       if (!validator.isValidString(shipping.street))
         return res.status(400).send({ status: false, message: "Street Is Required,should be in string value " })
 
-      if (!validator.isvalidStreet(shipping.street))
+      if (!validator.isValidStreet(shipping.street))
         return res.status(400).send({ status: false, message: "Enter Valid Street" })
  
          // city validation
@@ -89,7 +92,7 @@ const createUser = async function (req, res) {
       if (!validator.isValidNumber(shipping.pincode))
         return res.status(400).send({ status: false, message: "Pincode should be numerical" })
 
-      if (!validator.isvalidPincode(shipping.pincode))
+      if (!validator.isValidPincode(shipping.pincode))
         return res.status(400).send({ status: false, message: "Enter Valid Pincode " })
     }
 
@@ -98,7 +101,7 @@ const createUser = async function (req, res) {
       if (!validator.isValidString(billing.street))
         return res.status(400).send({ status: false, message: "Street Is Required,should be in string value " })
 
-      if (!validator.isvalidStreet(billing.street))
+      if (!validator.isValidStreet(billing.street))
         return res.status(400).send({ status: false, message: "Enter Valid Street" })
 
         //validate city in billing 
@@ -111,7 +114,7 @@ const createUser = async function (req, res) {
       if (!validator.isValidNumber(billing.pincode))
         return res.status(400).send({ status: false, message: "Pincode should be Numerical" })
 
-      if (!validator.isvalidPincode(billing.pincode))
+      if (!validator.isValidPincode(billing.pincode))
         return res.status(400).send({ status: false, message: "Enter Valid Pincode " })
     }
 
@@ -183,7 +186,7 @@ const updateUser = async function (req, res) {
   let userId = req.params.userId
   let data = req.body
 
-  let { fname, lname, email, phone, password } = data;
+  let { fname, lname, email, phone, password,address } = data;
  let profileImage = req.files
   if(!(profileImage || validator.isValidRequest(data)))
   return res.status(400).send({status:false, message:"Enter User Details To Update "}) //it should not be blank
@@ -198,7 +201,7 @@ const updateUser = async function (req, res) {
     data.profileImage = uploadedProfileImage
   }
 
-  if (fname) {
+  if (fname || fname === "") {
     if (!validator.isValidString(fname))
       return res.status(400).send({ status: false, message: "First Name Is Required " }) // it should be string
 
@@ -206,7 +209,7 @@ const updateUser = async function (req, res) {
       return res.status(400).send({ status: false, message: "Enter Valid First Name " })
   }
 
-  if (lname) {
+  if (lname || lname === "") {
     if (!validator.isValidString(lname))
       return res.status(400).send({ status: false, message: "Last Name Is Required " }) // it should be string
 
@@ -214,7 +217,7 @@ const updateUser = async function (req, res) {
       return res.status(400).send({ status: false, message: "Enter Valid Last Name " })
   }
 
-  if (email) {
+  if (email || email === "") {
     if (!validator.isValidString(email))
       return res.status(400).send({ status: false, message: "Email Is Required " }) // it should be string
 
@@ -226,7 +229,7 @@ const updateUser = async function (req, res) {
   }
 
 
-  if (phone) {
+  if (phone || phone === "") {
     if (!validator.isValidString(phone))
       return res.status(400).send({ status: false, message: " Phone Number is Required " })
 
@@ -237,7 +240,7 @@ const updateUser = async function (req, res) {
     if (isDuplicate) return res.status(400).send({ status: false, message: ` ${phone} Already Exist` })
   }
 
-  if (password) {
+  if (password || password === "") {
     if (!validator.isValidString(password))
       return res.status(400).send({ status: false, message: "Password Is Required " })
 
@@ -249,15 +252,11 @@ const updateUser = async function (req, res) {
 
   }
 
-
-  if (data.address) {
-    var parsedAddress = JSON.parse(data.address)
-    console.log(parsedAddress)
+  if (address || address === "") {
+    if(address === "")  return res.status(400).send({ status: false, message: "Enter Address" })
     let { shipping, billing } = parsedAddress
     if (shipping) {
-
-
-      if (shipping.street) {
+   if (shipping.street) {
         if (!validator.isValidString(shipping.street))
           return res.status(400).send({ status: false, message: "Street Is Required,Should Be In String Value " })
 
@@ -288,7 +287,7 @@ const updateUser = async function (req, res) {
         if (!validator.isValidString(billing.street))
           return res.status(400).send({ status: false, message: "Street Is Required,should be in string value " })
 
-        if (!validator.isvalidStreet(billing.street))
+        if (!validator.isValidStreet(billing.street))
           return res.status(400).send({ status: false, message: "Enter Valid Street Of Billing" })
       }
 
@@ -304,7 +303,7 @@ const updateUser = async function (req, res) {
         if (!validator.isValidNumber(billing.pincode))
           return res.status(400).send({ status: false, message: "Pincode Should Be Numerical" })
 
-        if (!validator.isvalidPincode(billing.pincode))
+        if (!validator.isValidPincode(billing.pincode))
           return res.status(400).send({ status: false, message: "Enter Valid Pincode " })
       }
 

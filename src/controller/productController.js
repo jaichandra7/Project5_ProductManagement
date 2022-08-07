@@ -18,12 +18,10 @@ const createProduct = async function (req, res) {
 
         //productImage validation
         let productImage = req.files
-        if (!validator.isValidImage(productImage[0].originalname))
-            return res.status(400).send({ status: false, msg: "Give valid Image File" })
+        if (!(productImage && productImage.length))  return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
+        
+        if (!validator.isValidImage(productImage[0].originalname))  return res.status(400).send({ status: false, msg: "Give valid Image File" })
 
-        if (!(productImage && productImage.length)) {
-            return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
-        }
         const uploadedproductImage = await uploadFile(productImage[0])
         data.productImage = uploadedproductImage
 
@@ -40,7 +38,7 @@ const createProduct = async function (req, res) {
         //Description validation
         if (!validator.isValidString(description))
             return res.status(400).send({ status: false, message: "Description Is Required " }) // it should be string
-        if (!validator.isvalidStreet(description))
+        if (!validator.isValidStreet(description))
             return res.status(400).send({ status: false, message: "Enter Valid Description " })
 
         //Price Validation
@@ -63,16 +61,18 @@ const createProduct = async function (req, res) {
 
         //isFreeShipping validation
         if (isFreeShipping) {
-            if (!validator.isBoolean(isFreeShipping))
-                return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
+            if(isFreeShipping === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
+            if (!validator.isBoolean(isFreeShipping)) return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
             console.log(isFreeShipping)
         }
 
         //STYLE VALIDATION
+        if (style || style === "") {
         if (!validator.isValidString(style))
             return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
         if (!validator.isValidTitle(style))
             return res.status(400).send({ status: false, message: "Enter Valid style " })
+        }
 
         //isAvailableSize validation
         if (!availableSizes || availableSizes === undefined) return res.status(400).send({ status: false, message: "Available Size Is Required" })
@@ -80,7 +80,7 @@ const createProduct = async function (req, res) {
         data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
 
         //installments Validation
-        if (installments) {
+        if (installments || installments === "") {
             if (!validator.isValidNumbers(installments))
                 return res.status(400).send({ status: false, message: "Installment Is Required And Must Be In Numbers" })
             if (!validator.isValidPrice(installments))
@@ -88,7 +88,8 @@ const createProduct = async function (req, res) {
         }
 
         //isDeleted validation
-        if (isDeleted) {
+        if (isDeleted || isDeleted === "") {
+            if(isDeleted === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
             if (!validator.isBoolean(isDeleted))
                 return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
         }
@@ -167,7 +168,7 @@ const updateProduct = async function (req, res) {
         if(!(productImage || validator.isValidRequest(data))) return res.status(400).send({status:false, message:"Enter User Details To Update "}) //it should not be blank
 
         //title validation
-        if (title) {
+        if (title || title === "") {
             if (!validator.isValidString(title))
                 return res.status(400).send({ status: false, message: "Title Is Required " }) // it should be string
 
@@ -176,7 +177,7 @@ const updateProduct = async function (req, res) {
         }
 
         //description validation
-        if (description) {
+        if (description || description === "") {
             if (!validator.isValidString(description))
                 return res.status(400).send({ status: false, message: "Description Is Required " }) // it should be string
 
@@ -185,7 +186,7 @@ const updateProduct = async function (req, res) {
         }
 
         //Price Validation
-        if (price) {
+        if (price || price === "") {
             if (!validator.isValidNumbers(price))
                 return res.status(400).send({ status: false, message: "Price Is Required And Must Be In Numbers" }) // it should be string
             if (!validator.isValidPrice(price))
@@ -193,31 +194,25 @@ const updateProduct = async function (req, res) {
         }
 
         //currency Id validation
-        if (currencyId) {
-            if (!validator.isValidString(currencyId))
-                return res.status(400).send({ status: false, message: "Currency Id is Required " })
-
+        if (currencyId || currencyId === "") {
+            if (!validator.isValidString(currencyId)) return res.status(400).send({ status: false, message: "Currency Id is Required " })
             if (currencyId !== "INR") return res.status(400).send({ status: false, message: "Currency Id Must Be INR" })
         }
 
         //currencyFormat validation
-        if (currencyFormat) {
-            if (!validator.isValidString(currencyFormat))
-                return res.status(400).send({ status: false, message: "Currency Id Is Required " })
-
-            if (currencyId !== "₹") return res.status(400).send({ status: false, message: "Currency Format Must Be ₹" })
+        if (currencyFormat || currencyFormat === "") {
+            if (!validator.isValidString(currencyFormat)) return res.status(400).send({ status: false, message: "currency Format Is Required " })
+            if (currencyFormat !== "₹") return res.status(400).send({ status: false, message: "Currency Format Must Be ₹" })
         }
 
         //isFreeShipping validation
-        if (isFreeShipping) {
-            if (!validator.isBoolean(isFreeShipping))
-                return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
-
-        }
-
+        if (isFreeShipping || isFreeShipping === "") {
+            if(isFreeShipping === "")  return res.status(400).send({ status: false, message: " isFreeShipping Is Required " }) 
+            if (!validator.isBoolean(isFreeShipping)) return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
+      }
 
         //style validation
-        if (style) {
+        if (style || style === "") {
             if (!validator.isValidString(style))
                 return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
 
@@ -227,7 +222,6 @@ const updateProduct = async function (req, res) {
 
         //productImage validation
         if (productImage.length) {
-            console.log(productImage)
             if (!productImage.length) return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
             if (!validator.isValidImage(productImage[0].originalname)) return res.status(400).send({ status: false, message: "Give valid Image File" })
 
@@ -245,7 +239,6 @@ const updateProduct = async function (req, res) {
 
         //installments Validation
         if (installments || installments === "") {
-            //if( installments === "") return res.status(400).send({ status: false, message: "Enter atleast One Size" })
             if (!validator.isValidNumbers(installments))
                 return res.status(400).send({ status: false, message: "Installment Is Required And Must Be In Numbers" })
             if (!validator.isValidPrice(installments))
@@ -254,7 +247,8 @@ const updateProduct = async function (req, res) {
 
 
         //isDeleted validation
-        if (isDeleted) {
+        if (isDeleted || isDeleted === "") {
+            if(isDeleted === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
             if (!validator.isBoolean(isDeleted))
                 return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
         }
