@@ -254,13 +254,14 @@ const updateUser = async function (req, res) {
 
   if (address || address === "") {
     if(address === "")  return res.status(400).send({ status: false, message: "Enter Address" })
+    var parsedAddress = JSON.parse(address) 
     let { shipping, billing } = parsedAddress
     if (shipping) {
    if (shipping.street) {
         if (!validator.isValidString(shipping.street))
           return res.status(400).send({ status: false, message: "Street Is Required,Should Be In String Value " })
 
-        if (!validator.isvalidStreet(shipping.street))
+        if (!validator.isValidStreet(shipping.street))
           return res.status(400).send({ status: false, message: "Enter Valid Street Of Shipping" })
       }
 
@@ -276,7 +277,7 @@ const updateUser = async function (req, res) {
         if (!validator.isValidNumber(shipping.pincode))
           return res.status(400).send({ status: false, message: "Pincode Should Be Numerical" })
 
-        if (!validator.isvalidPincode(shipping.pincode))
+        if (!validator.isValidPincode(shipping.pincode))
           return res.status(400).send({ status: false, message: "Enter Valid Pincode " })
       }
     }
