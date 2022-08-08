@@ -18,9 +18,9 @@ const createProduct = async function (req, res) {
 
         //productImage validation
         let productImage = req.files
-        if (!(productImage && productImage.length))  return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
-        
-        if (!validator.isValidImage(productImage[0].originalname))  return res.status(400).send({ status: false, msg: "Give valid Image File" })
+        if (!(productImage && productImage.length)) return res.status(400).send({ status: false, message: " Please Provide The Product Image" });
+
+        if (!validator.isValidImage(productImage[0].originalname)) return res.status(400).send({ status: false, msg: "Give valid Image File" })
 
         const uploadedproductImage = await uploadFile(productImage[0])
         data.productImage = uploadedproductImage
@@ -61,17 +61,17 @@ const createProduct = async function (req, res) {
 
         //isFreeShipping validation
         if (isFreeShipping) {
-            if(isFreeShipping === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
+            if (isFreeShipping === "") return res.status(400).send({ status: false, message: " isDeleted Is Required " })
             if (!validator.isBoolean(isFreeShipping)) return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
             console.log(isFreeShipping)
         }
 
         //STYLE VALIDATION
         if (style || style === "") {
-        if (!validator.isValidString(style))
-            return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
-        if (!validator.isValidTitle(style))
-            return res.status(400).send({ status: false, message: "Enter Valid style " })
+            if (!validator.isValidString(style))
+                return res.status(400).send({ status: false, message: "Style Is Required " }) // it should be string
+            if (!validator.isValidTitle(style))
+                return res.status(400).send({ status: false, message: "Enter Valid style " })
         }
 
         //isAvailableSize validation
@@ -89,7 +89,7 @@ const createProduct = async function (req, res) {
 
         //isDeleted validation
         if (isDeleted || isDeleted === "") {
-            if(isDeleted === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
+            if (isDeleted === "") return res.status(400).send({ status: false, message: " isDeleted Is Required " })
             if (!validator.isBoolean(isDeleted))
                 return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
         }
@@ -165,7 +165,7 @@ const updateProduct = async function (req, res) {
         let productImage = req.files
 
         //empty request validation
-        if(!(productImage || validator.isValidRequest(data))) return res.status(400).send({status:false, message:"Enter User Details To Update "}) //it should not be blank
+        if (!(productImage || validator.isValidRequest(data))) return res.status(400).send({ status: false, message: "Enter User Details To Update " }) //it should not be blank
 
         //title validation
         if (title || title === "") {
@@ -174,6 +174,10 @@ const updateProduct = async function (req, res) {
 
             if (!validator.isValidTitle(title))
                 return res.status(400).send({ status: false, message: "Enter Valid title " })
+
+            let title1 = await productModel.find({ title: title })
+            if (title1.length > 0) return res.status(400).send({ status: false, message: "Title Is Already Exist" })
+
         }
 
         //description validation
@@ -207,9 +211,9 @@ const updateProduct = async function (req, res) {
 
         //isFreeShipping validation
         if (isFreeShipping || isFreeShipping === "") {
-            if(isFreeShipping === "")  return res.status(400).send({ status: false, message: " isFreeShipping Is Required " }) 
+            if (isFreeShipping === "") return res.status(400).send({ status: false, message: " isFreeShipping Is Required " })
             if (!validator.isBoolean(isFreeShipping)) return res.status(400).send({ status: false, message: "IsFreeShipping Must Be Boolean value" })
-      }
+        }
 
         //style validation
         if (style || style === "") {
@@ -230,11 +234,11 @@ const updateProduct = async function (req, res) {
         }
 
         //isAvailableSize validation
-        if (availableSizes || availableSizes === "") {   
-            if( availableSizes === "") return res.status(400).send({ status: false, message: "Enter atleast One Size" })
+        if (availableSizes || availableSizes === "") {
+            if (availableSizes === "") return res.status(400).send({ status: false, message: "Enter atleast One Size" })
             if (!validator.isValidSize(availableSizes)) return res.status(400).send({ status: false, message: "Enter Valid Size" })
             data.availableSizes = availableSizes.toUpperCase().split(",").map(x => x.trim())
-           
+
         }
 
         //installments Validation
@@ -248,7 +252,7 @@ const updateProduct = async function (req, res) {
 
         //isDeleted validation
         if (isDeleted || isDeleted === "") {
-            if(isDeleted === "")  return res.status(400).send({ status: false, message: " isDeleted Is Required " }) 
+            if (isDeleted === "") return res.status(400).send({ status: false, message: " isDeleted Is Required " })
             if (!validator.isBoolean(isDeleted))
                 return res.status(400).send({ status: false, message: "isDeleted Must Be A Boolean Value" })
         }
