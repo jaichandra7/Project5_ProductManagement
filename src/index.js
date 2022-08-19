@@ -8,7 +8,7 @@ const { AppConfig } = require('aws-sdk');
 const app = express();
 
 app.use(bodyParser.json()); // tells the system that you want json to be used
-app.use(bodyParser.urlencoded({ extended: true })); 
+
 app.use(multer().any());
 // mongoDb connection
 mongoose
@@ -21,7 +21,7 @@ mongoose
   .then(() => console.log("MongoDb connected"))
   .catch((err) => console.log(err));
 
-// Initial route
+
 app.use("/", route);
 
 // port
